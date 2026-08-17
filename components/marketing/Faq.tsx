@@ -1,55 +1,67 @@
 "use client";
 
 import { useState } from "react";
-import { CaretDown } from "@phosphor-icons/react";
+import { ChevronDown } from "lucide-react";
 import { faq } from "@/lib/content";
-import { Container } from "@/components/ui/Container";
-import { SectionReveal } from "@/components/marketing/SectionReveal";
+import { useInViewAnimation } from "@/lib/useInViewAnimation";
+
+function FaqItem({
+  q,
+  a,
+  open,
+  onToggle,
+}: {
+  q: string;
+  a: string;
+  open: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <div className="border-b border-ink/10">
+      <button
+        type="button"
+        className="flex w-full items-center justify-between gap-4 py-5 text-left"
+        aria-expanded={open}
+        onClick={onToggle}
+      >
+        <span className="text-base font-medium text-ink">{q}</span>
+        <ChevronDown
+          className={`h-4 w-4 shrink-0 text-ink-muted transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+      {open ? (
+        <p className="pb-5 text-sm leading-relaxed text-ink-muted">{a}</p>
+      ) : null}
+    </div>
+  );
+}
 
 export function Faq() {
+  const head = useInViewAnimation<HTMLHeadingElement>();
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="section-y scroll-mt-20 bg-[#edeced]">
-      <Container>
-        <SectionReveal className="mx-auto max-w-2xl text-center">
-          <h2 className="text-balance text-3xl font-semibold tracking-tight text-neutral-950 md:text-4xl">
-            Frequently asked questions
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-neutral-600">
-            Straight answers about focus, privacy, media, and languages.
-          </p>
-        </SectionReveal>
-
-        <div className="mx-auto mt-10 max-w-2xl space-y-3">
-          {faq.map((item, i) => {
-            const isOpen = open === i;
-            return (
-              <SectionReveal key={item.q} delay={i * 0.03}>
-                <div className="overflow-hidden rounded-[var(--radius-md)] border border-neutral-200 bg-white">
-                  <button
-                    type="button"
-                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
-                    aria-expanded={isOpen}
-                    onClick={() => setOpen(isOpen ? null : i)}
-                  >
-                    <span className="font-medium text-neutral-950">{item.q}</span>
-                    <CaretDown
-                      size={18}
-                      className={`shrink-0 text-neutral-500 transition-transform ${isOpen ? "rotate-180" : ""}`}
-                    />
-                  </button>
-                  {isOpen ? (
-                    <div className="border-t border-neutral-100 px-5 py-4 text-sm leading-relaxed text-neutral-600">
-                      {item.a}
-                    </div>
-                  ) : null}
-                </div>
-              </SectionReveal>
-            );
-          })}
+    <section id="faq" className="scroll-mt-24 px-6 py-16">
+      <div className="mx-auto max-w-2xl">
+        <h2
+          ref={head.ref}
+          className={`${head.className} text-[32px] leading-[1.15] tracking-tight text-ink-2 md:text-[40px]`}
+        >
+          Questions,{" "}
+          <span className="font-display font-semibold">answered</span>
+        </h2>
+        <div className="mt-8">
+          {faq.map((item, i) => (
+            <FaqItem
+              key={item.q}
+              q={item.q}
+              a={item.a}
+              open={open === i}
+              onToggle={() => setOpen(open === i ? null : i)}
+            />
+          ))}
         </div>
-      </Container>
+      </div>
     </section>
   );
 }

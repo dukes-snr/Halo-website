@@ -37,10 +37,10 @@ Download CTA is placeholder until a real Store or installer URL is provided. Tes
 ## Brand Commitments
 
 - Name: Halo
-- Visual pin: CoolDock-style atmospheric landscape + floating rock framing, adapted for Halo/Windows
-- Design tokens from extracted CoolDock Design.md: primary blue `#0000ee` scale, amber accent, neutral grays, Inter display headings
-- Product UI chrome is pure black notch on light stage screenshots
+- Visual pin: Viktor Oddy studio page adapted for Halo. White canvas, ink `#051A24`, Satoshi body, bitmap display accents, layered pill shadows, product marquee, floating bottom nav
+- Product UI chrome is the real black notch on dark product stages
 - Logo assets: packaging/Assets (HaloIcon, StoreLogo)
+- Download CTA is placeholder until a Store or installer URL exists
 
 ## Evidence on Hand
 

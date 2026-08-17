@@ -1,91 +1,179 @@
+<!-- impeccable:design-schema 1 -->
+---
+name: Halo Marketing Site
+description: White studio page for a native Windows notch
+colors:
+  ink: "#051A24"
+  ink-2: "#0D212C"
+  ink-muted: "#273C46"
+  foam: "#F6FCFF"
+  mist: "#E0EBF0"
+  page: "#FFFFFF"
+  stage: "#071016"
+typography:
+  display:
+    fontFamily: "Bitcount Prop Single, Iowan Old Style, Palatino, serif"
+    fontSize: "32px"
+    fontWeight: 700
+    lineHeight: "1.15"
+    letterSpacing: "-0.02em"
+  headline:
+    fontFamily: "Satoshi, Avenir Next, Segoe UI, sans-serif"
+    fontSize: "32px"
+    fontWeight: 400
+    lineHeight: "1.15"
+    letterSpacing: "-0.02em"
+  body:
+    fontFamily: "Satoshi, Avenir Next, Segoe UI, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: "1.6"
+    letterSpacing: "normal"
+  label:
+    fontFamily: "Geist Mono, ui-monospace, monospace"
+    fontSize: "12px"
+    fontWeight: 400
+    lineHeight: "1.4"
+    letterSpacing: "normal"
+rounded:
+  image: "16px"
+  card: "40px"
+  full: "9999px"
+spacing:
+  hero: "24px"
+  section: "48px"
+  project: "80px"
+components:
+  button-primary:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.foam}"
+    rounded: "{rounded.full}"
+    padding: "12px 28px"
+  button-secondary:
+    backgroundColor: "{colors.page}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.full}"
+    padding: "12px 28px"
+  button-tertiary:
+    backgroundColor: "{colors.page}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.full}"
+    padding: "12px 28px"
+  card-dark:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.foam}"
+    rounded: "{rounded.card}"
+    padding: "32px 40px"
+  card-light:
+    backgroundColor: "{colors.page}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.card}"
+    padding: "32px 40px"
+---
+
 # Design System - Halo Marketing Site
 
-<!-- impeccable:design-schema 1 -->
+## Overview
 
-## Authority
+**Creative North Star: "The studio notch"**
 
-Built world for the Halo Windows marketing site. Visual pin: CoolDock landing structure + tokens from extracted Design.md, product truth from Halo marketing brief. Light marketing chrome with one intentional dark product showcase band.
+Halo's marketing site is a white studio page, not a landscape SaaS hero. It borrows the Viktor Oddy single-column pitch, mixed grotesk and bitmap type, layered pill shadows, and a floating bottom nav, then fills every frame with real Halo product captures.
 
-## Mode
+The page stays light from hero to footer. Ink is the only chrome color. Product UI sits on near-black stages. Conversion is one verb: Download Halo.
 
-Persuade (product marketing).
+**Key Characteristics:**
+- White canvas, ink type, no CoolDock landscape or glass header
+- Satoshi body with Bitcount display accents on short words
+- Real product screenshots only
+- Pill buttons with stacked ink shadows
+- Fixed bottom nav as the persistent download control
 
-## Palette
+## Colors
 
-| Token | Value | Role |
-|-------|-------|------|
-| primary-500 | `#0000ee` | CTAs, links, timeline dots |
-| primary-600 | `#0000d6` | Hover / body links |
-| accent-500 | `#f59e0b` | Sparse sparkle (stars only) |
-| neutral-50 | `#f7f7f7` | Page background |
-| neutral-900 | `#333333` | Body text |
-| neutral-950 | `#000000` | Headings / product black stages |
-| white | `#ffffff` | Cards and product stages |
+One ink family on white. No second accent.
 
-Color strategy: **Restrained** neutrals + primary blue. Amber is accent only, never a second CTA color.
+### Primary
+- **Ink** (`#051A24`): wordmark, body, primary buttons, dark cards
+
+### Neutral
+- **Ink 2** (`#0D212C`): headlines
+- **Ink muted** (`#273C46`): secondary lines
+- **Foam** (`#F6FCFF`): text on ink
+- **Mist** (`#E0EBF0`): supporting text on ink
+- **Page** (`#FFFFFF`): site ground
+- **Stage** (`#071016`): product image beds
+
+**The One Ink Rule.** Buttons, type, and dark cards all use the same ink. Do not reintroduce CoolDock blue or amber.
 
 ## Typography
 
-- **Family:** Inter via `next/font` (`--font-inter`) for display and body (closest available match to Design.md Inter Display)
-- **Base size:** `0.938rem`
-- **Display:** `text-4xl` → `text-5xl` / `3.5rem` hero, semibold, tracking-tight
-- **Body:** neutral-600/700, max measure ~xl on marketing subcopy
+**Display Font:** Bitcount Prop Single 700 (Mondwest stand-in; drop in `PPMondwest-Regular.woff2` to replace)
+**Body Font:** Satoshi 400/500 (Neue Montreal stand-in)
+**Label/Mono Font:** Geist Mono
 
-## Shape & elevation
+**Character:** A quiet grotesk pitch with bitmap words dropped into short accents. The mix is the signature. Long headings stay in Satoshi.
 
-- Radii: sm `0.5rem`, md `1.125rem`, lg `1.25rem`, xl `1.875rem`, full pills for CTAs
-- Cards: soft shadow `0 4px 24px -4px rgb(0 0 0 / 0.08)` + light border
-- Product stages: white rounded stage with deeper card shadow
-- Corner system: soft rounded marketing chrome; product screenshots keep black notch geometry
+### Hierarchy
+- **Display** (700, 32-80px, 1.15): wordmark, mixed-headline accents, partner line
+- **Headline** (400, 32-44px, 1.15): hero and page titles
+- **Title** (500, 22-30px): card titles, feature points
+- **Body** (400, 14-16px, 1.6, max ~65ch): paragraphs
+- **Label** (mono, 12-14px): hero tagline only
 
-## Layout topology
+**The Short Accent Rule.** Bitmap type is for one or two words. Full sentences stay in Satoshi.
 
-1. Sticky light header (≤64px)
-2. Hero: landscape atmosphere + dual rocks + floating product stage
-3. Proof, stations grid, personalization, testimonials scaffold
-4. Dark showcase band (single theme switch)
-5. Download CTA with rocks
-6. FAQ accordion
-7. Footer with landscape band + giant wordmark
+## Layout
 
-Feature routes share a centered claim + product stage + three point cards template. Changelog mirrors CoolDock Updates: vertical timeline with version markers and product captures.
+Home is a centered 440px hero, then full-bleed marquee, then a 2xl manifesto, then a right-weighted two-card pair, then a testimonial strip, then 1200px project stacks, FAQ, and a 7xl partner field. Inner pages keep a 720px reading column and a 1200px header. Bottom nav is reserved with ~7rem of footer padding. Breakpoints collapse every multi-column block to a single column below 768px.
 
-## Motion
+## Elevation & Depth
 
-| Moment | Tool | Behavior |
-|--------|------|----------|
-| Hero parallax | GSAP ScrollTrigger | Landscape, rocks, notch scrub on scroll |
-| Hero entrance | Motion | Opacity/y spring-in |
-| Section reveal | Motion `whileInView` | Once, 0.7s ease-out |
-| FAQ | React state | Accordion expand |
-| Reduced motion | both | Disable scrub and entrance offsets |
+Depth comes from stacked ink-tinted shadows, not borders or glass.
 
-GSAP and Motion never share the same component tree (Hero uses GSAP+Motion for distinct elements with cleanup; SectionReveal is Motion-only leaves).
+### Shadow Vocabulary
+- **Primary pill** (`0 1px 2px rgb(5 26 36 / 0.1), 0 4px 4px rgb(5 26 36 / 0.09), 0 9px 6px rgb(5 26 36 / 0.05), inset 0 2px 8px rgb(255 255 255 / 0.5)`): primary and tertiary buttons
+- **Secondary pill** (`0 0 0 0.5px rgb(0 0 0 / 0.05), 0 4px 30px rgb(0 0 0 / 0.08)`): secondary buttons
+- **Card** (`0 4px 16px rgb(0 0 0 / 0.08)`): light cards, partner field, quotes
+- **Nav** (layered ink + inset highlight): floating bottom pill
 
-## Materials
+## Shapes
 
-- `/public/scene/hero-landscape.jpg` - generated golden-hour mountains
-- `/public/scene/rock-left.jpg`, `rock-right.jpg` - generated rocks with CSS radial mask for cutout feel
-- `/public/product/*` - real Halo white-stage screenshots
-- `/public/brand/*` - Halo icons from packaging
+Pills for every control (`9999px`). Images at 16px. Offer cards and the partner field at 40px. Product screenshots keep their own notch geometry on a `#071016` stage.
 
 ## Components
 
-- `SiteHeader` / `SiteFooter`
-- `Hero`, `ProofSection`, `FeatureStations`, `MakeYours`, `Testimonials`, `ProductShowcase`, `DownloadCta`, `Faq`
-- `FeaturePageView` for feature routes
-- `Button`, `Container`, `SectionReveal`
+### Buttons
+- **Shape:** full pill, 12px 28px
+- **Primary:** ink fill, foam text, primary shadow
+- **Secondary:** white fill, ink text, secondary shadow, no border
+- **Tertiary:** white fill, ink text, primary shadow
+- **Label:** Download Halo is the only download verb
 
-## Anti-patterns avoided
+### Cards / Containers
+- Dark offer card: ink, 40px, foam type
+- Light offer card: white, 40px, card shadow
+- Quote cards: 32-40px, card shadow
 
-- No inventing pricing, Store URL, or real customer claims
-- Testimonials marked as placeholders
-- No fake-div product UI; real PNG captures only
-- No em-dashes in site copy
-- No scroll cue labels
+### Navigation
+- Home has no top header
+- Inner pages: in-flow Halo wordmark plus a single-line text nav
+- Bottom nav: white pill, bitmap H, Download Halo
+- Footer: Download Halo left, two link columns right
 
-## Open handoffs
+### Product stage
+- Near-black rounded-2xl bed, `object-contain`, real PNG captures only
 
-- Wire real download URL when available
-- Replace testimonial placeholders with real quotes
-- Optional: transparent PNG rocks (current assets use CSS mask over studio photos)
+## Do's and Don'ts
+
+### Do:
+- **Do** keep the page white from first pixel to last
+- **Do** prove the product with `/public/product` and `/public/scene` captures
+- **Do** mark testimonials as samples until real quotes exist
+- **Do** honor `prefers-reduced-motion` on fade, marquee, and parallax
+
+### Don't:
+- **Don't** invent prices, Store URLs, or customer names
+- **Don't** bring back CoolDock landscape, rocks, or glass headers
+- **Don't** set long sentences in the bitmap face
+- **Don't** use em-dashes in visible copy
+- **Don't** build fake notch UI from divs

@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import { Button } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Container";
-import { SectionReveal } from "@/components/marketing/SectionReveal";
 
 export const metadata: Metadata = {
   title: "Privacy",
@@ -30,35 +27,27 @@ const points = [
 
 export default function PrivacyPage() {
   return (
-    <section className="section-y bg-neutral-50">
-      <Container>
-        <SectionReveal className="mx-auto max-w-2xl text-center">
-          <h1 className="text-balance text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
-            Local-first privacy
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-neutral-600">
-            Halo keeps your data on this PC. No cloud account is required for
-            the core product.
-          </p>
-        </SectionReveal>
+    <section className="mx-auto max-w-[720px] px-6 pt-8 pb-16 md:pt-10">
+      <h1 className="text-[32px] leading-[1.15] tracking-tight text-ink-2 md:text-[40px] lg:text-[44px]">
+        Local-first <span className="font-display font-semibold">privacy</span>
+      </h1>
+      <p className="mt-5 max-w-[65ch] text-sm leading-relaxed text-ink md:text-base">
+        Halo keeps your data on this PC. No cloud account is required for the
+        core product.
+      </p>
 
-        <div className="mx-auto mt-12 grid max-w-4xl gap-4 md:grid-cols-2">
-          {points.map((point, i) => (
-            <SectionReveal key={point.title} delay={i * 0.04}>
-              <div className="h-full rounded-[var(--radius-lg)] border border-neutral-200 bg-white p-6 shadow-soft">
-                <h2 className="text-lg font-semibold text-neutral-950">
-                  {point.title}
-                </h2>
-                <p className="mt-2 text-sm text-neutral-600">{point.body}</p>
-              </div>
-            </SectionReveal>
-          ))}
-        </div>
+      <ul className="mt-14 flex flex-col gap-10">
+        {points.map((point) => (
+          <li key={point.title}>
+            <h2 className="text-2xl font-medium tracking-tight text-ink md:text-3xl">
+              {point.title}
+            </h2>
+            <p className="mt-2 text-sm text-ink/70 md:text-base">{point.body}</p>
+          </li>
+        ))}
+      </ul>
 
-        <SectionReveal className="mt-12 text-center">
-          <Button href="/download">Download for Windows</Button>
-        </SectionReveal>
-      </Container>
+
     </section>
   );
 }

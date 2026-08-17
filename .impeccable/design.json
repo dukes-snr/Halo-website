@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-16T00:00:00.000Z",
+  "title": "Design System: Halo Marketing Site",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "primary", "displayName": "Ink", "canonical": "#051A24" },
+      "page": { "role": "neutral", "displayName": "Page", "canonical": "#FFFFFF" },
+      "foam": { "role": "neutral", "displayName": "Foam", "canonical": "#F6FCFF" }
+    },
+    "shadows": [
+      {
+        "name": "primary-pill",
+        "value": "0 1px 2px rgb(5 26 36 / 0.1), 0 4px 4px rgb(5 26 36 / 0.09), 0 9px 6px rgb(5 26 36 / 0.05), inset 0 2px 8px rgb(255 255 255 / 0.5)",
+        "purpose": "Primary and tertiary pills"
+      },
+      {
+        "name": "card",
+        "value": "0 4px 16px rgb(0 0 0 / 0.08)",
+        "purpose": "Light cards, quotes, partner field"
+      }
+    ],
+    "motion": [
+      {
+        "name": "fade-in-up",
+        "value": "0.8s ease-out",
+        "purpose": "Section entrance"
+      },
+      {
+        "name": "marquee",
+        "value": "30s linear infinite (10s on mobile)",
+        "purpose": "Product strip"
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ink pill used for Download Halo.",
+      "html": "<a class=\"ds-btn-primary\" href=\"/download\">Download Halo</a>",
+      "css": ".ds-btn-primary { background: #051A24; color: #F6FCFF; padding: 12px 28px; border-radius: 9999px; font: 500 14px Satoshi, sans-serif; text-decoration: none; box-shadow: 0 1px 2px rgb(5 26 36 / 0.1), 0 4px 4px rgb(5 26 36 / 0.09), inset 0 2px 8px rgb(255 255 255 / 0.5); } .ds-btn-primary:hover { background: #0D212C; } .ds-btn-primary:focus-visible { outline: 2px solid #051A24; outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The studio notch",
+    "overview": "Halo's marketing site is a white studio page, not a landscape SaaS hero. Ink is the only chrome color. Conversion is one verb: Download Halo.",
+    "keyCharacteristics": [
+      "White canvas, ink type",
+      "Satoshi body with Bitcount accents",
+      "Real product screenshots only",
+      "Pill buttons with stacked ink shadows",
+      "Fixed bottom nav"
+    ],
+    "rules": [
+      { "name": "The One Ink Rule", "body": "Buttons, type, and dark cards all use the same ink.", "section": "colors" },
+      { "name": "The Short Accent Rule", "body": "Bitmap type is for one or two words.", "section": "typography" }
+    ],
+    "dos": [
+      "Do keep the page white from first pixel to last",
+      "Do prove the product with real captures",
+      "Do mark testimonials as samples until real quotes exist"
+    ],
+    "donts": [
+      "Don't invent prices, Store URLs, or customer names",
+      "Don't bring back CoolDock landscape or glass headers",
+      "Don't set long sentences in the bitmap face"
+    ]
+  }
+}

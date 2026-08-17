@@ -1,15 +1,5 @@
 import type { Metadata } from "next";
 import { changelog } from "@/lib/content";
-import { productAssets } from "@/lib/product-assets";
-import { Container } from "@/components/ui/Container";
-import { ProductShot } from "@/components/ui/ProductShot";
-import { SectionReveal } from "@/components/marketing/SectionReveal";
-import { Button } from "@/components/ui/Button";
-
-const changelogAssets = [
-  productAssets.nook,
-  productAssets.mediaExpanded,
-] as const;
 
 export const metadata: Metadata = {
   title: "Updates",
@@ -18,89 +8,42 @@ export const metadata: Metadata = {
 
 export default function ChangelogPage() {
   return (
-    <section className="section-y bg-neutral-50">
-      <Container>
-        <SectionReveal className="mx-auto max-w-2xl text-center">
-          <h1 className="text-balance text-4xl font-semibold tracking-tight text-neutral-950 md:text-5xl">
-            Updates
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-neutral-600">
-            Release notes for Halo. Expand this timeline as you ship builds.
-          </p>
-        </SectionReveal>
+    <section className="mx-auto max-w-[1200px] px-6 pt-8 pb-16 md:pt-10">
+      <div className="max-w-[720px]">
+        <h1 className="text-[32px] leading-[1.15] tracking-tight text-ink-2 md:text-[40px] lg:text-[44px]">
+          Product <span className="font-display font-semibold">updates</span>
+        </h1>
+        <p className="mt-5 max-w-[65ch] text-sm leading-relaxed text-ink md:text-base">
+          Release notes for Halo. Expand this list as you ship builds.
+        </p>
+      </div>
 
-        <div className="relative mx-auto mt-16 max-w-4xl">
-          <div
-            className="absolute top-2 bottom-2 left-[7px] w-px bg-neutral-200 md:left-1/2 md:-translate-x-px"
-            aria-hidden
-          />
+      <div className="mt-16 flex flex-col gap-16 md:gap-20">
+        {changelog.map((entry) => (
+          <article key={entry.version}>
+            <div className="ml-8 md:ml-28">
+              <p className="text-sm text-ink-muted">{entry.date}</p>
+              <h2 className="mt-2 text-2xl font-medium tracking-tight text-ink md:text-3xl">
+                {entry.title}
+              </h2>
+              <p className="mt-2 max-w-xl text-sm text-ink/70 md:text-base">
+                {entry.body}
+              </p>
+            </div>
+            <div className="mt-6 overflow-hidden rounded-2xl bg-[#071016] shadow-lg">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={entry.image} alt="" className="w-full object-contain" />
+            </div>
+            <ul className="ml-8 mt-4 space-y-1.5 text-sm text-ink/70 md:ml-28">
+              {entry.bullets.map((b) => (
+                <li key={b}>{b}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
 
-          <ol className="space-y-16">
-            {changelog.map((entry, i) => (
-              <li key={entry.version} className="relative">
-                <SectionReveal>
-                  <div className="grid gap-6 md:grid-cols-2 md:gap-12">
-                    <div
-                      className={`md:text-right ${i % 2 === 1 ? "md:order-2 md:text-left" : ""}`}
-                    >
-                      <div className="mb-3 flex items-center gap-3 md:justify-end">
-                        {i % 2 === 0 ? (
-                          <>
-                            <span className="text-sm text-neutral-500 md:order-1">
-                              {entry.date}
-                            </span>
-                            <span className="relative z-10 h-3.5 w-3.5 shrink-0 rounded-full bg-primary-500 ring-4 ring-neutral-50 md:absolute md:left-1/2 md:-translate-x-1/2" />
-                          </>
-                        ) : (
-                          <>
-                            <span className="relative z-10 h-3.5 w-3.5 shrink-0 rounded-full bg-primary-500 ring-4 ring-neutral-50 md:absolute md:left-1/2 md:-translate-x-1/2" />
-                            <span className="text-sm text-neutral-500">
-                              {entry.date}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                      <h2 className="text-2xl font-semibold tracking-tight text-neutral-950">
-                        {entry.version}
-                      </h2>
-                      <p className="mt-1 text-sm font-medium text-neutral-700">
-                        {entry.title}
-                      </p>
-                    </div>
 
-                    <div className={i % 2 === 1 ? "md:order-1" : ""}>
-                      <div className="overflow-hidden rounded-[var(--radius-lg)] border border-neutral-200 bg-[#f3f2f3] shadow-soft">
-                        <ProductShot
-                          src={changelogAssets[i % changelogAssets.length].src}
-                          alt=""
-                          width={changelogAssets[i % changelogAssets.length].width}
-                          height={
-                            changelogAssets[i % changelogAssets.length].height
-                          }
-                          size="card"
-                        />
-                      </div>
-                      <p className="mt-4 text-sm text-neutral-600">{entry.body}</p>
-                      <ul className="mt-3 space-y-1.5 text-sm text-neutral-600">
-                        {entry.bullets.map((b) => (
-                          <li key={b} className="flex gap-2">
-                            <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-neutral-400" />
-                            <span>{b}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </SectionReveal>
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        <SectionReveal className="mt-16 text-center">
-          <Button href="/download">Download for Windows</Button>
-        </SectionReveal>
-      </Container>
     </section>
   );
 }

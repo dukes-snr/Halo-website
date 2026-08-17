@@ -29,7 +29,15 @@ export const hero = {
   headline: "Your Windows desktop finally has a notch worth using.",
   subhead:
     "Halo is a Dynamic Island for Windows: media, files, devices, and calendar without switching windows.",
-  primaryCta: { href: "/download", label: "Download for Windows" },
+  tagline: "Dynamic Island for Windows",
+  line1: { plain: "Stay in the ", accent: "window," },
+  line2: { plain: "the ", accent: "glance way." },
+  paragraphs: [
+    "Halo is a resident activity notch for Windows. Media, files, devices, calendar, and apps live at the top of the display so you never leave the window you are in.",
+    "It is native Windows 11, not a web wrapper. Halo talks to real media sessions, the file system, Bluetooth, and the Windows calendar. Notes and clips stay on this PC.",
+    "Download for Windows 11. The public installer is coming soon.",
+  ],
+  primaryCta: { href: "/download", label: "Download Halo" },
   secondaryCta: { href: "/#stations", label: "See features" },
 };
 
@@ -50,7 +58,7 @@ export const stations = [
     href: "/control-center",
     title: "Control Center",
     body: "Wi-Fi, Bluetooth, Airplane Mode, volume, and brightness. Live sliders, real radios.",
-    image: "/scene/implementation-call.png",
+    image: "/product/feature-control-center.png",
   },
   {
     href: "/calendar",
@@ -207,7 +215,7 @@ export const featurePages: FeaturePage[] = [
     title: "Control Center",
     headline: "Battery is a door.",
     body: "Click time and battery to open device quick settings: Wi-Fi, Bluetooth, Airplane Mode, volume, and brightness with live sliders and real radios.",
-    image: "/scene/implementation-call.png",
+    image: "/product/feature-control-center.png",
     points: [
       {
         title: "Battery HUD",
@@ -228,7 +236,7 @@ export const featurePages: FeaturePage[] = [
     title: "Calendar",
     headline: "What's next, without Outlook in the way.",
     body: "See the week, today's agenda, and event reminders with Join when a meeting link is present. Uses the Windows appointment store when permitted.",
-    image: "/scene/implementation-timer.png",
+    image: "/product/feature-calendar.png",
     points: [
       {
         title: "Week strip",
@@ -249,7 +257,7 @@ export const featurePages: FeaturePage[] = [
     title: "Notes",
     headline: "Capture without leaving flow.",
     body: "Browse notes on the notch. Create new notes quickly. Edit fully in a lightweight Halo Notes window. Stored under local app data.",
-    image: "/scene/implementation-notification-reply.png",
+    image: "/product/feature-notes-editor.png",
     points: [
       {
         title: "Notch list",
