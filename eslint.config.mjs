@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored procedural avatar engine (upstream export).
+    "components/brand/cloudee-avatar.js",
   ]),
 ]);
 

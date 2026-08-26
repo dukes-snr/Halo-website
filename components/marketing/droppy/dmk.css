@@ -1,0 +1,1171 @@
+      /* Hero mock: liquid-glass macOS frame with the real Droppy media   */
+      /* player behind the notch and the real clipboard bar.              */
+      /* ---------------------------------------------------------------- */
+      .dmk {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 26px;
+        overflow: hidden;
+        font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif;
+        /* No base fill. The old translucent-white glass was a dark-theme
+           leftover and, with the bezel clipped below, read as a stray light
+           ring just inside the frame. */
+        background: transparent;
+        /* No drop shadow: the mock is nested inside .media-block, which is
+           overflow:hidden, so a shadow on the mock was clipped at the block
+           bounds and painted a hard dark band/halo below and beside the frame
+           instead of a soft cast. No drawn bezel either: the mock sits
+           directly on the art, its edge defined only by the glass itself. */
+      }
+      /* The hero's mock wrapper carries no surface of its own: its lighter
+         well peeked past the mock's corner radius as a second light ring. */
+      .hero__media .media-block {
+        background: transparent;
+        border-radius: 26px;
+      }
+      /* Glass body: real backdrop refraction of whatever is behind the   */
+      /* frame, saturated and brightened like macOS material, with a soft */
+      /* diagonal sheen and corner light catch on top.                    */
+      .dmk__screen {
+        position: absolute;
+        inset: 0;
+        -webkit-backdrop-filter: blur(18px) saturate(1.2);
+        backdrop-filter: blur(18px) saturate(1.2);
+      }
+      /* Intrinsic glass: a tiny pre-blurred capture of the exact backdrop
+         the glass refracts (frame_001 under the scrubhero mask, glass
+         recipe applied offline). It sits BEHIND .dmk__screen, so the
+         backdrop-filter samples it exactly like the live canvas; the mock
+         therefore paints with its glass complete even before the frame
+         sequence has drawn anything. It fades away only once the canvas
+         has painted a frame (droppy:first-frame) AND the hero media's
+         reveal fade has finished (see the inline script by the mock):
+         while that ancestor animates opacity, the browser isolates the
+         mock in a compositing group and the backdrop-filter cannot sample
+         the page -- releasing the stand-in any earlier reopens the sharp
+         glass window during the reveal. The real refraction then takes
+         over invisibly: the two are blurs of the same art. If the frame
+         CDN is slow or dead, it simply stays: the mock can never render
+         glassless. */
+      .dmk__preblur {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image: url("/assets/mock/hero-glass-preblur.webp");
+        background-size: 100% 100%;
+        transition: opacity 700ms ease;
+      }
+      .dmk__preblur,
+      .dmk__preblur.is-clear { opacity: 0; }
+      /* Barely-there wallpaper: the real blue "horizon" abstract, faded   */
+      /* to a whisper so the glass stays dark.                              */
+      .dmk__wall {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-image: url("/assets/mock/win-wallpaper.png");
+        background-size: cover;
+        background-position: center;
+        opacity: 1;
+      }
+
+      /* macOS light-mode chrome: the desktop glass refracts the light page
+         behind the frame, so the fake menu bar reads as dark ink like a real
+         light-appearance menu bar. The Droppy notch/shelf/island panels below
+         keep their own dark surface + light text (that is the product). */
+      .dmk__menubar { position: absolute; top: 0; left: 0; right: 0; height: 34px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; color: var(--ink); }
+      /* Whisper of a hint that the notch is playable; gone after the     */
+      /* first interaction.                                                */
+      .dmk__hint {
+        position: absolute;
+        top: 46px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: rgba(27, 27, 32, 0.62);
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        pointer-events: none;
+        z-index: 3;
+        transition: opacity 600ms ease;
+      }
+      /* Tap glyph is a white asset; recolor to dark ink to match the hint. */
+      .dmk__hint img { width: 12px; height: auto; opacity: 0.9; filter: brightness(0) saturate(100%) invert(16%) sepia(18%) saturate(760%) hue-rotate(184deg) brightness(94%) contrast(90%); }
+      .dmk__hint.is-gone { opacity: 0; }
+      .dmk__menubar,
+      .dmk__clip { display: none !important; }
+      .dmk__demo {
+        position: absolute;
+        top: 18px;
+        left: 16px;
+        z-index: 4;
+        border: 0;
+        border-radius: 8px;
+        padding: 6px 12px;
+        background: rgba(20, 24, 32, 0.55);
+        color: #fff;
+        font: 600 12px/1 "Segoe UI Variable Text", "Segoe UI", sans-serif;
+        cursor: pointer;
+        backdrop-filter: blur(16px);
+      }
+      .dmk__demo:hover { background: rgba(20, 24, 32, 0.72); }
+      .dmk__taskbar {
+        display: none !important;
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        bottom: 8px;
+        z-index: 4;
+        height: 48px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px;
+        border-radius: 12px;
+        background: rgba(18, 22, 30, 0.62);
+        color: #fff;
+        backdrop-filter: blur(22px) saturate(1.4);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+      }
+      .dmk__tb-center { display: flex; align-items: center; gap: 6px; }
+      .dmk__tb-btn,
+      .dmk__tb-app {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+      }
+      .dmk__tb-app.is-open { background: rgba(255,255,255,0.12); }
+      .dmk__tb-btn img,
+      .dmk__tb-app img,
+      .dmk__tb-btn svg { width: 18px; height: 18px; display: block; filter: invert(1); }
+      .dmk__tb-app img { filter: none; width: 20px; height: 20px; object-fit: contain; }
+      .dmk__tb-start img { filter: invert(1); width: 16px; height: 16px; }
+      .dmk__tb-tray { position: absolute; right: 14px; display: flex; align-items: center; gap: 10px; color: #fff; }
+      .dmk__tb-tray .dmk__mb-ic { color: #fff; }
+      .dmk__tb-tray .dmk__clock { color: #fff; font-size: 12px; }
+      .dmk__apple { width: 13px; height: 16px; }
+      .dmk__mb-left, .dmk__mb-right { display: flex; align-items: center; gap: 17px; height: 100%; }
+      .dmk__mb-right { gap: 15px; }
+      .dmk__mb-left span, .dmk__mb-right span { line-height: 1; }
+      .dmk__mb-right svg, .dmk__mb-right img, .dmk__mb-left svg { display: block; flex: 0 0 auto; }
+      .dmk__mb-app { font-size: 12.5px; font-weight: 700; }
+      .dmk__mb-menu { font-size: 12.5px; font-weight: 400; color: rgba(42, 50, 65, 0.82); }
+      .dmk__mb-demo { cursor: pointer; transition: color 160ms ease; }
+      .dmk__mb-demo:hover { color: var(--ink); }
+      /* The menu bar is a light surface, so its flat Droppy mark uses the
+         supplied gray-blue ink directly. */
+      .dmk__mb-droppy { width: auto; height: 16px; }
+      .dmk__mb-ic { width: 15.5px; height: 15.5px; color: rgba(42, 50, 65, 0.88); }
+      .dmk__mb-ic--batt { width: 24px; height: 12px; }
+      .dmk__clock { font-size: 12.5px; font-weight: 500; }
+      .dmk__notch {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 196px;
+        height: 31px;
+        background: #000;
+        border-radius: 0 0 15px 15px;
+        cursor: pointer;
+        /* Squish anchors at the screen edge so pressing never opens a   */
+        /* gap above the shell.                                           */
+        transform-origin: 50% 0;
+        /* Release leg of every gesture: springy with a real overshoot. */
+        transition: width 560ms cubic-bezier(0.32,1.22,0.36,1), height 560ms cubic-bezier(0.32,1.22,0.36,1), border-radius 560ms cubic-bezier(0.32,1.22,0.36,1), background 400ms ease, transform 460ms cubic-bezier(0.3,1.6,0.4,1);
+        z-index: 3;
+        outline: none;
+      }
+      /* Hover: the shell grows toward you in realtime, like the real notch. */
+      .dmk__notch:not(.is-open):not(.is-pressing):not(.is-qa):not(.is-cloud):hover { transform: translateX(-50%) scale(1.045); }
+      /* Top fillets: the shell curves outward into the screen's top edge, */
+      /* exactly like the real shelf chrome.                               */
+      .dmk__notch::before,
+      .dmk__notch::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 15px;
+        height: 15px;
+        pointer-events: none;
+        transition: width 560ms cubic-bezier(0.32,1.22,0.36,1), height 560ms cubic-bezier(0.32,1.22,0.36,1), left 560ms cubic-bezier(0.32,1.22,0.36,1), right 560ms cubic-bezier(0.32,1.22,0.36,1);
+      }
+      .dmk__notch::before { left: -14px; background: radial-gradient(circle farthest-side at 0 100%, transparent calc(100% - 0.5px), #000 100%); }
+      .dmk__notch::after { right: -14px; background: radial-gradient(circle farthest-side at 100% 100%, transparent calc(100% - 0.5px), #000 100%); }
+      .dmk__notch.is-open::before { left: -21px; width: 22px; height: 22px; }
+      .dmk__notch.is-open::after { right: -21px; width: 22px; height: 22px; }
+      /* Small media HUD: the resting state while music plays, exactly    */
+      /* like the real compact shelf.                                      */
+      .dmk__notch.is-mini { width: 252px; height: 34px; border-radius: 0 0 16px 16px; }
+      .dmk__mini {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 6.5px 11px 0 8px;
+        opacity: 0;
+        transform: scale(0.86);
+        transform-origin: 50% 0;
+        filter: blur(9px);
+        transition: opacity 380ms cubic-bezier(0.32,1.22,0.36,1), transform 560ms cubic-bezier(0.32,1.22,0.36,1), filter 460ms cubic-bezier(0.32,1.22,0.36,1);
+        pointer-events: none;
+      }
+      .dmk__notch.is-mini .dmk__mini { opacity: 1; transform: none; filter: blur(0); pointer-events: auto; }
+      .dmk__mini-art { width: 21px; height: 21px; border-radius: 6px; display: block; flex: 0 0 auto; transition: transform 380ms cubic-bezier(0.3, 1.65, 0.4, 1), filter 240ms ease; }
+      .dmk__mini-art:hover { transform: scale(1.07); filter: brightness(1.1); }
+      .dmk__mini-art.is-forced { transform: scale(0.88); filter: brightness(0.92); transition: transform 110ms cubic-bezier(0.3, 0.7, 0.4, 1), filter 110ms ease; }
+      /* Peek: hovering the art grows the pill DOWNWARD only, sliding the  */
+      /* full track line in underneath while the wave becomes a pause.     */
+      .dmk__notch.is-peek { height: 64px; border-radius: 0 0 20px 20px; }
+      .dmk__notch.is-peek:not(.is-pressing):hover { transform: translateX(-50%); }
+      .dmk__mini-right { position: relative; display: flex; align-items: center; height: 21px; min-width: 22px; justify-content: flex-end; flex: 0 0 auto; cursor: pointer; transition: transform 380ms cubic-bezier(0.3, 1.65, 0.4, 1); }
+      .dmk__mini-right.is-forced { transform: scale(0.8); transition: transform 100ms cubic-bezier(0.3, 0.7, 0.4, 1); }
+      .dmk__mini-pauseic, .dmk__mini-playic { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); height: 13px; width: auto; opacity: 0; transition: opacity 220ms ease; }
+      /* Hovering the album (peek) or the waveform itself reveals the      */
+      /* control: pause while playing, play while paused.                  */
+      .dmk__notch.is-peek .dmk__mini-wave, .dmk__mini-right:hover .dmk__mini-wave { opacity: 0; }
+      .dmk:not(.is-paused) .dmk__notch.is-peek .dmk__mini-pauseic,
+      .dmk:not(.is-paused) .dmk__mini-right:hover .dmk__mini-pauseic { opacity: 1; }
+      .dmk.is-paused .dmk__notch.is-peek .dmk__mini-playic,
+      .dmk.is-paused .dmk__mini-right:hover .dmk__mini-playic { opacity: 1; }
+      .dmk__mini-track {
+        position: absolute;
+        left: 12px;
+        right: 12px;
+        top: 35px;
+        color: rgba(255,255,255,0.88);
+        font-size: 13px;
+        font-weight: 700;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(90deg, transparent 1%, #000 12%, #000 88%, transparent 99%);
+        mask-image: linear-gradient(90deg, transparent 1%, #000 12%, #000 88%, transparent 99%);
+        opacity: 0;
+        transform: translateY(-5px);
+        filter: blur(5px);
+        transition: opacity 320ms cubic-bezier(0.32,1.22,0.36,1), transform 420ms cubic-bezier(0.32,1.22,0.36,1), filter 380ms cubic-bezier(0.32,1.22,0.36,1);
+        pointer-events: none;
+      }
+      .dmk__notch.is-peek .dmk__mini-track { opacity: 1; transform: none; filter: blur(0); }
+      .dmk__mini-wave { display: flex; align-items: center; gap: 2px; height: 12px; flex: 0 0 auto; transition: opacity 220ms ease; }
+      .dmk__mini-wave i { width: 2.4px; border-radius: 2px; background: linear-gradient(180deg, #9aa8ff 0%, #5d7fd4 55%, #3e5f9e 100%); height: 26%; animation: dmkWave 900ms ease-in-out infinite; }
+      .dmk__mini-wave i:nth-child(1) { animation-delay: -120ms; }
+      .dmk__mini-wave i:nth-child(2) { animation-delay: -430ms; }
+      .dmk__mini-wave i:nth-child(3) { animation-delay: -700ms; }
+      .dmk__mini-wave i:nth-child(4) { animation-delay: -80ms; }
+      .dmk__mini-wave i:nth-child(5) { animation-delay: -540ms; }
+      .dmk__mini-wave i:nth-child(6) { animation-delay: -300ms; }
+      .dmk__mini-wave i:nth-child(7) { animation-delay: -620ms; }
+      .dmk.is-paused .dmk__mini-wave i { animation: none; height: 20%; }
+      .dmk.is-offscreen .dmk__mini-wave i,
+      .dmk.is-offscreen .dmk__wave span { animation-play-state: paused; }
+      /* Press leg: fast, heavy ease-out, like real mass under a finger. */
+      .dmk__notch.is-pressing { transform: translateX(-50%) scale(0.93); transition: transform 130ms cubic-bezier(0.3, 0.7, 0.4, 1); }
+      .dmk__notch.is-open { width: min(350px, 54%); height: 205px; border-radius: 0 0 38px 38px; cursor: default; }
+      /* Content rides the exact same curve as the shell, blurring in and */
+      /* out, so the whole thing reads as one geometry unfurling from the  */
+      /* notch and collapsing back into its center.                        */
+      .dmk__player { position: absolute; inset: 0; display: flex; align-items: stretch; opacity: 0; transform: scale(0.86); transform-origin: 50% 0; filter: blur(9px); transition: opacity 380ms cubic-bezier(0.32,1.22,0.36,1), transform 560ms cubic-bezier(0.32,1.22,0.36,1), filter 460ms cubic-bezier(0.32,1.22,0.36,1); pointer-events: none; overflow: hidden; border-radius: inherit; }
+      .dmk__main { flex: 0 0 350px; box-sizing: border-box; padding: 22px 24px 14px; display: flex; flex-direction: column; min-width: 0; }
+      /* Queue column: revealed by widening the shell; content blurs in. */
+      .dmk__notch.is-open.is-queue { width: min(600px, 92%); }
+      .dmk__queue { flex: 1; min-width: 0; display: flex; flex-direction: column; margin: 18px 0 14px; padding: 0 16px 0 18px; border-left: 1px solid rgba(255,255,255,0.12); opacity: 0; filter: blur(7px); transition: opacity 360ms cubic-bezier(0.32,1.22,0.36,1) 60ms, filter 440ms cubic-bezier(0.32,1.22,0.36,1) 60ms; }
+      .dmk__notch.is-queue .dmk__queue { opacity: 1; filter: blur(0); }
+      .dmk__queue-head { color: #fff; font-size: 13px; font-weight: 700; margin-bottom: 11px; flex: 0 0 auto; }
+      .dmk__queue-list { flex: 1; overflow-y: auto; scrollbar-width: none; display: flex; flex-direction: column; gap: 11px; min-height: 0; }
+      .dmk__queue-list::-webkit-scrollbar { display: none; }
+      .dmk__qrow { display: flex; align-items: center; gap: 10px; cursor: pointer; flex: 0 0 auto; }
+      .dmk__qrow img { width: 34px; height: 34px; border-radius: 8px; display: block; flex: 0 0 auto; }
+      .dmk__qrow-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+      .dmk__qrow-title, .dmk__qrow-artist {
+        white-space: nowrap;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent 99%);
+        mask-image: linear-gradient(90deg, #000 86%, transparent 99%);
+      }
+      .dmk__qrow-title { color: #fff; font-size: 12px; font-weight: 700; }
+      .dmk__qrow-artist { color: rgba(255,255,255,0.55); font-size: 10.5px; font-weight: 500; margin-top: 1px; }
+      .dmk__qrow-add { color: rgba(255,255,255,0.55); flex: 0 0 auto; }
+      .dmk__qrow-add svg { width: 14px; height: 14px; display: block; }
+      /* Very subtle queued-song pulse: title and artist ripple in a wave. */
+      .dmk__qrow.is-pulsing .dmk__qrow-title,
+      .dmk__qrow.is-pulsing .dmk__qrow-artist { animation: dmkQueuePulse 750ms ease-in-out 2; }
+      @keyframes dmkQueuePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.42; } }
+      .dmk__ctl--aux.is-active { background: rgba(255,255,255,0.14); }
+      /* Floating lane: rides the shell's animated bottom edge and lives   */
+      /* on the exact same open/close clock as the shelf itself.           */
+      .dmk__lane {
+        position: absolute;
+        top: calc(100% + 11px);
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px) scale(0.86);
+        transform-origin: 50% 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        opacity: 0;
+        filter: blur(7px);
+        pointer-events: none;
+        transition: opacity 380ms cubic-bezier(0.32,1.22,0.36,1), transform 560ms cubic-bezier(0.32,1.22,0.36,1), filter 460ms cubic-bezier(0.32,1.22,0.36,1);
+      }
+      .dmk__notch.is-open .dmk__lane { opacity: 1; transform: translateX(-50%); filter: blur(0); pointer-events: auto; }
+      .dmk__lane-pill { position: relative; display: flex; align-items: center; gap: 3px; background: rgba(10,10,12,0.92); border-radius: 999px; padding: 4px; }
+      /* One highlight chip glides between segments instead of fading. */
+      .dmk__lane-ind {
+        position: absolute;
+        top: 4px;
+        height: 31px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.18);
+        pointer-events: none;
+        transition: left 380ms cubic-bezier(0.32,1.22,0.36,1), width 380ms cubic-bezier(0.32,1.22,0.36,1), opacity 200ms ease;
+      }
+      .dmk__lane-seg { position: relative; z-index: 1; width: 31px; height: 31px; border-radius: 999px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+      .dmk__lane-seg img { width: 16px; height: 15px; object-fit: contain; opacity: 0.85; transition: opacity 220ms ease; }
+      .dmk__lane-seg.is-active img { opacity: 1; }
+      .dmk__lane-circle { position: relative; width: 39px; height: 39px; border-radius: 50%; background: rgba(10,10,12,0.92); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+      /* Active look matches the pill segments: an inner chip, not a full fill. */
+      .dmk__lane-circle::before { content: ""; position: absolute; inset: 4px; border-radius: 50%; background: rgba(255,255,255,0.18); opacity: 0; transition: opacity 220ms ease; }
+      .dmk__lane-circle.is-active::before { opacity: 1; }
+      /* Island stage: full-bleed wall of Dynamic Island scenes with a    */
+      /* heavy page-wide veil and centered copy floating over it.          */
+      .island-stage {
+        position: relative;
+        width: 100vw;
+        margin: 40px calc(50% - 50vw);
+        padding: 40px 0 48px;
+        overflow: hidden;
+      }
+      .island-stage .shelfgrid {
+        padding: 0 22px;
+        /* Fade the tiles themselves out at the section's edges so the   */
+        /* page background shows through: the box has no color of its    */
+        /* own, so it blends into whatever the body gradient is locally. */
+        -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+        mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+      }
+      .island-stage__veil {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        background: radial-gradient(ellipse 58% 44% at 50% 46%, rgba(4, 6, 10, 0.94) 0%, rgba(4, 6, 10, 0.66) 52%, rgba(4, 6, 10, 0.2) 78%, rgba(4, 6, 10, 0) 100%);
+      }
+      .island-stage__copy {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 24px;
+        pointer-events: none;
+      }
+      /* The copy floats over a mosaic of dark app screenshots, so it takes
+         the light font color plus a soft #1A2030 halo. The halo is a pure
+         text-shadow bloom, not a plate: it hugs the glyphs, so the mosaic
+         stays visible right up to the letterforms and no band appears. */
+      .island-stage__copy .fcard__title,
+      .island-stage__copy .fcard__sub {
+        color: var(--text-on-dark);
+        text-shadow:
+          0 0 14px rgba(26, 32, 48, 0.95),
+          0 0 34px rgba(26, 32, 48, 0.8),
+          0 2px 5px rgba(26, 32, 48, 0.7);
+      }
+      .island-stage__copy .fcard__sub { margin: 14px auto 0; max-width: 560px; }
+      .island-stage__icon { display: block; width: 132px; height: 132px; margin: 0 auto 20px; }
+      /* The island wall's tile-to-column mapping is authored in script
+         (ISLAND_BUCKETS), not left to multicol balancing. The 2-column
+         phone split stays 6/6 so the wide widgets-shelf tile sits in the
+         right column and the icon + copy read as dead-center. */
+      /* Desktop icons: native macOS look, right-aligned columns like a  */
+      /* real desktop. Selection = grey icon backplate + accent label.    */
+      .dmk__desk { position: absolute; top: 56px; right: 24px; display: grid; grid-template-columns: repeat(2, 92px); gap: 22px 10px; z-index: 1; }
+      .dmk__dicon { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none; transition: transform 380ms cubic-bezier(0.3, 1.6, 0.4, 1); }
+      .dmk__dicon:hover { transform: scale(1.06); }
+      .dmk__dicon.is-pressed { transform: scale(0.9); transition: transform 120ms cubic-bezier(0.3, 0.7, 0.4, 1); }
+      .dmk__dicon-img {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        height: 46px;
+        border-radius: 6px;
+        padding: 3px 4px;
+        transition: background 140ms ease;
+      }
+      .dmk__dicon-img img { height: 40px; width: auto; max-width: 58px; object-fit: contain; display: block; pointer-events: none; }
+      .dmk__dicon--thumb .dmk__dicon-img img { width: 54px; height: 38px; object-fit: cover; border-radius: 4px; box-shadow: 0 0 0 1px rgba(255,255,255,0.4); }
+      /* Light-desktop labels: dark ink, dropping the old dark drop-shadow the
+         white text relied on. A whisper of light halo keeps them separated
+         from the icons above on the pale glass. */
+      .dmk__dicon-label { max-width: 90px; font-size: 11.5px; font-weight: 500; color: #1b1b20; text-shadow: 0 1px 2px rgba(255,255,255,0.7); padding: 1px 8px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background 140ms ease, text-shadow 140ms ease, color 140ms ease; }
+      .dmk__dicon.is-sel .dmk__dicon-img { background: rgba(140,140,145,0.38); }
+      /* Selected label stays white on the macOS blue selection pill. */
+      .dmk__dicon.is-sel .dmk__dicon-label { background: #0A84FF; color: #fff; text-shadow: none; }
+      /* Quick-add popover: glass sheet under the + with an arrow tail,   */
+      /* natural-language input, Add pill.                                 */
+      .dmk__qadd {
+        position: absolute;
+        top: 46px;
+        left: 8px;
+        width: min(330px, calc(100% - 16px));
+        z-index: 6;
+        background: rgba(28, 30, 36, 0.86);
+        -webkit-backdrop-filter: blur(36px) saturate(1.4);
+        backdrop-filter: blur(36px) saturate(1.4);
+        border-radius: 18px;
+        padding: 12px 13px 11px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        box-shadow: 0 22px 54px rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        transform: scale(0.86);
+        transform-origin: 52px -10px;
+        filter: blur(6px);
+        transition: opacity 260ms cubic-bezier(0.32,1.22,0.36,1), transform 380ms cubic-bezier(0.32,1.22,0.36,1), filter 300ms cubic-bezier(0.32,1.22,0.36,1);
+        pointer-events: none;
+      }
+      .dmk__qadd.is-open { opacity: 1; transform: none; filter: blur(0); pointer-events: auto; }
+      .dmk__qadd::before { content: ""; position: absolute; top: -5px; left: 46px; width: 12px; height: 12px; border-radius: 2px; background: rgba(32, 34, 40, 0.97); transform: rotate(45deg); }
+      .dmk__qadd-head { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.62); font-size: 12px; font-weight: 600; margin-bottom: 10px; }
+      .dmk__qadd-head img { width: 14px; height: auto; opacity: 0.7; }
+      .dmk__qadd-row { display: flex; align-items: center; gap: 9px; }
+      .dmk__qadd-circle { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.45); flex: 0 0 auto; }
+      .dmk__qadd-clock { width: 13px; height: 13px; object-fit: contain; opacity: 0.6; flex: 0 0 auto; }
+      .dmk__qadd-input { flex: 1; min-width: 0; background: none; border: none; outline: none; color: #fff; font-size: 13px; font-weight: 500; font-family: inherit; }
+      .dmk__qadd-input::placeholder { color: rgba(255,255,255,0.42); }
+      .dmk__qadd-btn { padding: 7px 14px; border-radius: 999px; background: rgba(255,255,255,0.13); color: rgba(255,255,255,0.5); font-size: 12px; font-weight: 700; cursor: pointer; flex: 0 0 auto; transition: background 200ms ease, color 200ms ease, transform 200ms cubic-bezier(0.3,1.6,0.4,1); }
+      .dmk__qadd-btn:active { transform: scale(0.93); }
+      .dmk__qadd.has-text .dmk__qadd-btn { background: rgba(255,255,255,0.92); color: #111318; }
+      .dmk__lane-circle img { position: relative; }
+      .dmk__lane-circle img { width: 19px; height: 16px; object-fit: contain; }
+      /* File tray view: dashed dropzone, then the dropped files. */
+      .dmk__notch.is-open.is-tray { width: min(560px, 86%); height: 136px; }
+      /* Widgets view: the real scrollable droplet row. */
+      .dmk__notch.is-open.is-widgets { width: min(560px, 86%); height: 136px; }
+      .dmk__widgets {
+        position: absolute;
+        inset: 0;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        opacity: 0;
+        transform: scale(0.9);
+        transform-origin: 50% 0;
+        filter: blur(8px);
+        transition: opacity 360ms cubic-bezier(0.32,1.22,0.36,1), transform 520ms cubic-bezier(0.32,1.22,0.36,1), filter 440ms cubic-bezier(0.32,1.22,0.36,1);
+        pointer-events: none;
+        overflow: hidden;
+        border-radius: inherit;
+      }
+      .dmk__notch.is-widgets .dmk__widgets { opacity: 1; transform: none; filter: blur(0); pointer-events: auto; }
+      /* Scroll edges: content dissolves through a black gradient at        */
+      /* whichever side has more to scroll.                                  */
+      .dmk__widgets::before, .dmk__widgets::after,
+      .dmk__tray::before, .dmk__tray::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 48px;
+        pointer-events: none;
+        z-index: 2;
+        opacity: 0;
+        transition: opacity 240ms ease;
+      }
+      .dmk__widgets::before, .dmk__tray::before { left: 0; background: linear-gradient(90deg, #000 12%, rgba(0,0,0,0.72) 45%, transparent); }
+      .dmk__widgets::after, .dmk__tray::after { right: 0; background: linear-gradient(270deg, #000 12%, rgba(0,0,0,0.72) 45%, transparent); }
+      .dmk__widgets.can-left::before, .dmk__tray.can-left::before { opacity: 1; }
+      .dmk__widgets.can-right::after, .dmk__tray.can-right::after { opacity: 1; }
+      .dmk__notch.is-open.is-widgets .dmk__player { opacity: 0; transform: scale(0.94); filter: blur(8px); pointer-events: none; }
+      .dmk__widgets-row { display: flex; align-items: flex-start; gap: 24px; overflow-x: auto; scrollbar-width: none; flex: 1; align-self: stretch; cursor: grab; padding-top: 30px; }
+      .dmk__widgets-row::-webkit-scrollbar { display: none; }
+      .dmk__widget { position: relative; display: flex; flex-direction: column; align-items: center; flex: 0 0 70px; cursor: pointer; transition: transform 380ms cubic-bezier(0.3, 1.65, 0.4, 1), filter 300ms ease; }
+      .dmk__widget img { width: 56px; height: 56px; border-radius: 13px; object-fit: cover; display: block; pointer-events: none; }
+      .dmk__widget span { position: absolute; top: calc(100% + 7px); left: 50%; transform: translateX(-50%); width: 74px; color: rgba(255,255,255,0.85); font-size: 10.5px; font-weight: 600; text-align: center; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+      .dmk__widget.is-forced { transform: scale(0.87); filter: blur(1.2px) brightness(0.9); transition: transform 110ms cubic-bezier(0.3, 0.7, 0.4, 1), filter 110ms ease; }
+      .dmk__tray {
+        position: absolute;
+        inset: 0;
+        padding: 0 22px;
+        display: flex;
+        opacity: 0;
+        transform: scale(0.9);
+        transform-origin: 50% 0;
+        filter: blur(8px);
+        transition: opacity 360ms cubic-bezier(0.32,1.22,0.36,1), transform 520ms cubic-bezier(0.32,1.22,0.36,1), filter 440ms cubic-bezier(0.32,1.22,0.36,1);
+        pointer-events: none;
+        overflow: hidden;
+        border-radius: inherit;
+      }
+      .dmk__notch.is-tray .dmk__tray { opacity: 1; transform: none; filter: blur(0); pointer-events: auto; }
+      .dmk__notch.is-open.is-tray .dmk__player { opacity: 0; transform: scale(0.94); filter: blur(8px); pointer-events: none; }
+      .dmk__tray-drop {
+        flex: 1;
+        margin: 20px 0;
+        border: 2.5px dashed rgba(255,255,255,0.26);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        cursor: pointer;
+        transition: border-color 220ms ease, opacity 260ms ease;
+      }
+      .dmk__tray-drop:hover { border-color: rgba(255,255,255,0.4); }
+      .dmk__tray-drop img { height: 26px; width: auto; opacity: 0.55; }
+      .dmk__tray-drop span { color: rgba(255,255,255,0.5); font-size: 15px; font-weight: 600; }
+      .dmk__notch.is-filled .dmk__tray-drop { display: none; }
+      .dmk__tray-files { display: none; flex: 1; align-items: flex-start; gap: 24px; padding: 30px 2px 0; overflow-x: auto; scrollbar-width: none; cursor: grab; }
+      .dmk__tray-files::-webkit-scrollbar { display: none; }
+      .dmk__notch.is-filled .dmk__tray-files { display: flex; }
+      /* Files materialize and dissolve through gaussian blur. */
+      .dmk__tfile { position: relative; display: flex; flex-direction: column; align-items: center; flex: 0 0 70px; width: 70px; opacity: 0; transform: translateY(10px) scale(0.85); filter: blur(8px); transition: opacity 340ms cubic-bezier(0.32,1.22,0.36,1), transform 460ms cubic-bezier(0.32,1.22,0.36,1), filter 400ms cubic-bezier(0.32,1.22,0.36,1), width 360ms cubic-bezier(0.32,1.22,0.36,1), margin 360ms cubic-bezier(0.32,1.22,0.36,1); }
+      .dmk__tfile.is-in { opacity: 1; transform: none; filter: blur(0); }
+      .dmk__tfile.is-out { opacity: 0; transform: scale(0.8); filter: blur(9px); width: 0; margin-left: -24px; overflow: hidden; }
+      .dmk__tfile-thumb { position: relative; width: 56px; height: 56px; border-radius: 13px; background: #101216; display: block; cursor: pointer; }
+      .dmk__tfile-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 13px; display: block; pointer-events: none; }
+      .dmk__tfile-thumb--doc { background: #fff; }
+      .dmk__tfile-name { position: absolute; top: calc(100% + 7px); left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.85); font-size: 10.5px; font-weight: 600; line-height: 1.25; max-width: 70px; white-space: nowrap; overflow: hidden; }
+      /* Blue selection check, straddling the thumb's bottom left. */
+      .dmk__tfile-check { position: absolute; left: 50%; bottom: -9px; width: 21px; height: 21px; border-radius: 50%; background: #2f7cf6; box-shadow: 0 0 0 2px #101114; display: flex; align-items: center; justify-content: center; opacity: 0; transform: translateX(-50%) scale(0.4); transition: opacity 200ms ease, transform 320ms cubic-bezier(0.3, 1.6, 0.4, 1); }
+      .dmk__tfile.is-sel .dmk__tfile-check { opacity: 1; transform: translateX(-50%) scale(1); }
+      /* Subtle selection plate around the preview. */
+      .dmk__tfile-thumb { transition: box-shadow 240ms ease; }
+      .dmk__tfile.is-sel .dmk__tfile-thumb { box-shadow: 0 0 0 5px rgba(255,255,255,0.11); }
+      .dmk__tfile-check svg { width: 11px; height: 11px; }
+      /* Hover delete. */
+      .dmk__tfile-x { position: absolute; top: -9px; right: -8px; width: 22px; height: 22px; border-radius: 50%; background: rgba(64,64,68,0.96); color: #fff; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.6); transition: opacity 180ms ease, transform 260ms cubic-bezier(0.3, 1.6, 0.4, 1); cursor: pointer; }
+      .dmk__tfile:hover .dmk__tfile-x { opacity: 1; transform: scale(1); }
+      .dmk__tfile-x svg { width: 9px; height: 9px; }
+      .dmk__tray-acts { position: absolute; right: 15px; bottom: 15px; display: flex; gap: 8px; z-index: 3; }
+      /* Quick actions: revealed while a drag hovers the notch, 1:1 with   */
+      /* the real drop targets (Keep / Droppy Cloud / AirDrop / Mail).     */
+      .dmk__notch.is-qa { width: min(480px, 74%); height: 118px; border-radius: 0 0 38px 38px; }
+      .dmk__qa {
+        position: absolute;
+        inset: 0;
+        padding: 36px 12px 12px;
+        display: flex;
+        gap: 10px;
+        opacity: 0;
+        transform: scale(0.9);
+        transform-origin: 50% 0;
+        filter: blur(8px);
+        transition: opacity 360ms cubic-bezier(0.32,1.22,0.36,1), transform 520ms cubic-bezier(0.32,1.22,0.36,1), filter 440ms cubic-bezier(0.32,1.22,0.36,1);
+        pointer-events: none;
+        border-radius: inherit;
+        overflow: hidden;
+      }
+      .dmk__notch.is-qa .dmk__qa { opacity: 1; transform: none; filter: blur(0); pointer-events: auto; }
+      .dmk__qa-tile {
+        flex: 1;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.055);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: background 170ms ease;
+      }
+      .dmk__qa-tile:first-child { border-bottom-left-radius: 26px; }
+      .dmk__qa-tile:last-child { border-bottom-right-radius: 26px; }
+      .dmk__qa-tile.is-hov { background: rgba(255,255,255,0.17); }
+      .dmk__qa-tile img { height: 19px; width: auto; object-fit: contain; flex: 0 0 auto; }
+      .dmk__qa-tile span { color: #fff; font-size: 12.5px; font-weight: 600; line-height: 1.2; text-align: center; padding: 0 4px; }
+      /* System sliders: the real Display / Volume HUDs. Wide bar hugging */
+      /* the menubar line: glyph + label left, tinted slider + value right.*/
+      .dmk__notch.is-shud { width: 390px; height: 31px; border-radius: 0 0 14px 14px; }
+      .dmk__shud {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 12px;
+        opacity: 0;
+        filter: blur(6px);
+        transition: opacity 300ms cubic-bezier(0.32,1.22,0.36,1), filter 340ms cubic-bezier(0.32,1.22,0.36,1);
+        pointer-events: none;
+      }
+      .dmk__notch.is-shud .dmk__shud { opacity: 1; filter: blur(0); }
+      .dmk__shud-ic { width: 15px; height: 15px; object-fit: contain; flex: 0 0 auto; }
+      .dmk__shud-label { color: #fff; font-size: 12.5px; font-weight: 700; }
+      .dmk__shud-track { margin-left: auto; width: 64px; height: 6px; border-radius: 999px; background: var(--hud-track); overflow: hidden; flex: 0 0 auto; }
+      .dmk__shud-fill { display: block; height: 100%; border-radius: inherit; width: var(--lvl, 50%); background: var(--hud-color); transition: width 110ms linear; }
+      .dmk__shud-val { width: 21px; display: flex; justify-content: flex-end; color: #fff; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+      .dmk__shud-d { transition: filter 140ms ease, opacity 140ms ease; }
+      .dmk__shud-d.is-tick { filter: blur(1.8px); opacity: 0.8; }
+      @keyframes dmk-val-pop {
+        0% { transform: scale(1.3); filter: blur(2.2px); }
+        100% { transform: scale(1); filter: blur(0); }
+      }
+      .dmk__shud-val.is-settle { animation: dmk-val-pop 360ms cubic-bezier(0.3, 1.6, 0.4, 1); }
+      /* Droppy Cloud upload HUD: compact radar+ring pill that morphs     */
+      /* into the wide success panel, 1:1 with QuickShareUploadHUDView.    */
+      .dmk__notch.is-cloud { width: 270px; height: 31px; border-radius: 0 0 14px 14px; }
+      .dmk__notch.is-cloud.is-cloudx { width: min(380px, 60%); height: 88px; border-radius: 0 0 32px 32px; }
+      .dmk__cloud { position: absolute; inset: 0; opacity: 0; pointer-events: none; border-radius: inherit; overflow: hidden; }
+      .dmk__notch.is-cloud .dmk__cloud { opacity: 1; }
+      .dmk__cloud-mini {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 11px;
+        opacity: 0;
+        filter: blur(6px);
+        transition: opacity 300ms cubic-bezier(0.32,1.22,0.36,1), filter 340ms cubic-bezier(0.32,1.22,0.36,1);
+      }
+      .dmk__notch.is-cloud:not(.is-cloudx) .dmk__cloud-mini { opacity: 1; filter: blur(0); }
+      .dmk__cloud-radar { width: 19px; height: 19px; display: block; flex: 0 0 auto; }
+      .dmk__cloud-state { position: relative; width: 15px; height: 15px; flex: 0 0 auto; }
+      .dmk__cloud-state svg { position: absolute; inset: 0; transition: opacity 200ms ease; }
+      .dmk__cloud-state svg circle {
+        fill: none;
+        stroke: #0A84FF;
+        stroke-width: 1.4;
+        stroke-linecap: round;
+        stroke-dasharray: 39.6;
+        stroke-dashoffset: 38;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+        transition: stroke-dashoffset 1.8s linear;
+      }
+      .dmk__cloud-mincheck {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 1.4px solid #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transform: scale(0.55);
+        transition: opacity 200ms ease, transform 340ms cubic-bezier(0.3, 1.6, 0.4, 1);
+      }
+      .dmk__cloud-mincheck img { width: 7.5px; height: auto; }
+      .dmk__cloud.is-done .dmk__cloud-state svg { opacity: 0; }
+      .dmk__cloud.is-done .dmk__cloud-mincheck { opacity: 1; transform: none; }
+      .dmk__cloud-full {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 0 22px;
+        opacity: 0;
+        transform: scale(0.92);
+        transform-origin: 50% 0;
+        filter: blur(8px);
+        transition: opacity 360ms cubic-bezier(0.32,1.22,0.36,1), transform 520ms cubic-bezier(0.32,1.22,0.36,1), filter 440ms cubic-bezier(0.32,1.22,0.36,1);
+      }
+      .dmk__notch.is-cloudx .dmk__cloud-full { opacity: 1; transform: none; filter: blur(0); pointer-events: auto; cursor: pointer; }
+      .dmk__cloud-thumb { width: 44px; height: 44px; border-radius: 10px; overflow: hidden; background: #101216; flex: 0 0 auto; }
+      .dmk__cloud-thumb.is-doc { background: #fff; }
+      .dmk__cloud-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .dmk__cloud-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+      .dmk__cloud-title { font-size: 14px; font-weight: 700; color: #fff; line-height: 1.2; }
+      .dmk__cloud-name { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .dmk__cloud-check {
+        margin-left: auto;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+      }
+      .dmk__cloud-check img { width: 15px; height: auto; }
+      /* Convert flow: options sheet in the cloud-panel style, then the  */
+      /* converting panel with a progress ring, a glow-pop on the result, */
+      /* and a compact done HUD before restoring.                          */
+      .dmk__notch.is-cv { width: min(430px, 66%); height: 128px; border-radius: 0 0 32px 32px; }
+      .dmk__notch.is-cv.is-cvgo { width: min(380px, 60%); height: 88px; }
+      .dmk__notch.is-cvmini { width: 270px; height: 31px; border-radius: 0 0 14px 14px; }
+      .dmk__conv { position: absolute; inset: 0; opacity: 0; pointer-events: none; border-radius: inherit; overflow: hidden; }
+      .dmk__notch.is-cv .dmk__conv, .dmk__notch.is-cvmini .dmk__conv { opacity: 1; }
+      .dmk__conv-full {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 22px 0;
+        opacity: 0;
+        transform: scale(0.92);
+        transform-origin: 50% 0;
+        filter: blur(8px);
+        transition: opacity 360ms cubic-bezier(0.32,1.22,0.36,1), transform 520ms cubic-bezier(0.32,1.22,0.36,1), filter 440ms cubic-bezier(0.32,1.22,0.36,1);
+        pointer-events: none;
+      }
+      .dmk__notch.is-cv .dmk__conv-full { opacity: 1; transform: none; filter: blur(0); pointer-events: auto; }
+      .dmk__notch.is-cv.is-cvgo .dmk__conv-full { padding-top: 22px; }
+      .dmk__conv-state { position: relative; margin-left: auto; width: 34px; height: 34px; flex: 0 0 auto; opacity: 0; transition: opacity 240ms ease; }
+      .dmk__notch.is-cvgo .dmk__conv-state { opacity: 1; }
+      .dmk__conv-state svg { position: absolute; inset: 0; transition: opacity 200ms ease; }
+      .dmk__conv-state svg circle {
+        fill: none;
+        stroke: #0A84FF;
+        stroke-width: 2.4;
+        stroke-linecap: round;
+        stroke-dasharray: 94.2;
+        stroke-dashoffset: 92;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+        transition: stroke-dashoffset 2.2s linear;
+      }
+      .dmk__conv-check {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transform: scale(0.55);
+        transition: opacity 200ms ease, transform 340ms cubic-bezier(0.3, 1.6, 0.4, 1);
+      }
+      .dmk__conv-check img { width: 15px; height: auto; }
+      .dmk__conv.is-done .dmk__conv-state svg { opacity: 0; }
+      .dmk__conv.is-done .dmk__conv-check { opacity: 1; transform: none; }
+      .dmk__conv-opts {
+        position: absolute;
+        left: 22px;
+        right: 22px;
+        bottom: 22px;
+        display: flex;
+        gap: 7px;
+        opacity: 0;
+        transform: translateY(6px);
+        filter: blur(6px);
+        transition: opacity 300ms cubic-bezier(0.32,1.22,0.36,1), transform 420ms cubic-bezier(0.32,1.22,0.36,1), filter 340ms cubic-bezier(0.32,1.22,0.36,1);
+        pointer-events: none;
+      }
+      .dmk__notch.is-cv:not(.is-cvgo) .dmk__conv-opts { opacity: 1; transform: none; filter: blur(0); pointer-events: auto; }
+      .dmk__conv-opt {
+        flex: 1;
+        text-align: center;
+        padding: 7px 0;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 160ms ease, transform 240ms cubic-bezier(0.3, 1.6, 0.4, 1);
+      }
+      .dmk__conv-opt:hover { background: rgba(255,255,255,0.16); }
+      .dmk__conv-opt:active { transform: scale(0.92); }
+      .dmk__conv-mini {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 11px;
+        opacity: 0;
+        filter: blur(6px);
+        transition: opacity 300ms cubic-bezier(0.32,1.22,0.36,1), filter 340ms cubic-bezier(0.32,1.22,0.36,1);
+      }
+      .dmk__notch.is-cvmini .dmk__conv-mini { opacity: 1; filter: blur(0); }
+      .dmk__conv-mini > img { width: 17px; height: 17px; object-fit: contain; }
+      .dmk__conv-minicheck { position: relative; width: 15px; height: 15px; border-radius: 50%; border: 1.4px solid #fff; display: flex; align-items: center; justify-content: center; }
+      .dmk__conv-minicheck img { width: 7.5px; height: auto; }
+      /* Result pop: the converted file lands with a spring and a glow. */
+      @keyframes dmk-conv-pop {
+        0% { transform: scale(1); box-shadow: 0 0 0 rgba(10,132,255,0); }
+        35% { transform: scale(1.22); box-shadow: 0 0 26px rgba(10,132,255,0.85); }
+        70% { transform: scale(0.97); box-shadow: 0 0 14px rgba(10,132,255,0.4); }
+        100% { transform: scale(1); box-shadow: 0 0 0 rgba(10,132,255,0); }
+      }
+      .dmk__conv .dmk__cloud-thumb.is-popped { animation: dmk-conv-pop 750ms cubic-bezier(0.3, 1.3, 0.4, 1); }
+      /* Floating drag preview + macOS-style copy badge. */
+      .dmk__dragghost {
+        position: fixed;
+        z-index: 400;
+        pointer-events: none;
+        transform-origin: 0 0;
+        opacity: 0.92;
+        border-radius: 12px;
+        box-shadow: 0 18px 44px rgba(0,0,0,0.5);
+        transition: opacity 200ms ease;
+      }
+      .dmk__dragbadge {
+        position: fixed;
+        z-index: 401;
+        pointer-events: none;
+        width: 19px;
+        height: 19px;
+        border-radius: 50%;
+        background: #34a853;
+        border: 1.5px solid #fff;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .dmk__tray-act { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; flex: 0 0 auto; }
+      .dmk__tray-act img { height: 12.5px; width: auto; }
+      .dmk__lane-count { display: none; color: #fff; font-size: 11.5px; font-weight: 700; margin-left: 6px; }
+      .dmk__lane-seg.has-count { width: auto; padding: 0 11px 0 9px; border-radius: 999px; }
+      .dmk__lane-seg.has-count .dmk__lane-count { display: inline; }
+      /* Calendar: month grid left, agenda right, 1:1 with the ToDo      */
+      /* droplet's expanded calendar. Accent runs blue in the mock.        */
+      .dmk__notch.is-open.is-cal { width: min(600px, 92%); height: 252px; }
+      .dmk__notch.is-open.is-cal .dmk__player { opacity: 0; transform: scale(0.94); filter: blur(8px); pointer-events: none; }
+      .dmk__cal {
+        position: absolute;
+        inset: 0;
+        padding: 16px 18px 14px 22px;
+        display: flex;
+        gap: 18px;
+        opacity: 0;
+        transform: scale(0.9);
+        transform-origin: 50% 0;
+        filter: blur(8px);
+        transition: opacity 360ms cubic-bezier(0.32,1.22,0.36,1), transform 520ms cubic-bezier(0.32,1.22,0.36,1), filter 440ms cubic-bezier(0.32,1.22,0.36,1);
+        pointer-events: none;
+        border-radius: inherit;
+        overflow: hidden;
+      }
+      .dmk__notch.is-open.is-cal .dmk__cal { opacity: 1; transform: none; filter: blur(0); pointer-events: auto; }
+      .dmk__cal-left { width: 46%; flex: 0 0 auto; display: flex; flex-direction: column; }
+      .dmk__cal-head { display: flex; align-items: center; gap: 9px; padding: 0 2px 8px; }
+      .dmk__cal-month { color: #ff453a; font-size: 14.5px; font-weight: 800; letter-spacing: 0.02em; }
+      .dmk__cal-add { width: 19px; height: 19px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 200ms cubic-bezier(0.3,1.6,0.4,1), background 160ms ease; }
+      .dmk__cal-add:active { transform: scale(0.86); background: rgba(255,255,255,0.2); }
+      .dmk__cal-add img { width: 8.5px; height: 8.5px; object-fit: contain; }
+      .dmk__cal-nav { margin-left: auto; display: flex; gap: 14px; padding-right: 4px; }
+      .dmk__cal-nav img { width: 7px; height: 11.5px; object-fit: contain; opacity: 0.85; cursor: pointer; transition: transform 200ms cubic-bezier(0.3,1.6,0.4,1), opacity 160ms ease; }
+      .dmk__cal-nav img:active { transform: scale(0.8); opacity: 1; }
+      .dmk__cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 2px; flex: 1; align-content: space-between; }
+      .dmk__cal-wd { color: rgba(255,255,255,0.45); font-size: 9.5px; font-weight: 700; text-align: center; padding-bottom: 2px; }
+      .dmk__cal-day {
+        position: relative;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.92);
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 50%;
+      }
+      .dmk__cal-day.is-out { color: rgba(255,255,255,0.28); }
+      .dmk__cal-day.is-wknd { color: rgba(255,255,255,0.55); }
+      .dmk__cal-day.is-out.is-wknd { color: rgba(255,255,255,0.22); }
+      .dmk__cal-day span { position: relative; z-index: 1; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: box-shadow 200ms ease, background 200ms ease, color 200ms ease, transform 240ms cubic-bezier(0.3,1.6,0.4,1); }
+      .dmk__cal-day:active span { transform: scale(0.85); }
+      .dmk__cal-day.is-today span { background: #ff453a; color: #fff; font-weight: 700; }
+      .dmk__cal-day.is-sel:not(.is-today) span { box-shadow: inset 0 0 0 1.5px rgba(255,69,58,0.85); }
+      .dmk__cal-right { flex: 1; min-width: 0; overflow-y: auto; scrollbar-width: none; padding-right: 2px; scroll-behavior: smooth; }
+      .dmk__cal-right::-webkit-scrollbar { display: none; }
+      .dmk__cal-sec { color: rgba(255,255,255,0.5); font-size: 9.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 10px 2px 6px; }
+      .dmk__cal-sec:first-child { padding-top: 2px; }
+      .dmk__cal-row {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 11px;
+        padding: 7px 11px;
+        margin-bottom: 5px;
+        background: rgba(255,255,255,0.06);
+        overflow: hidden;
+        transition: opacity 320ms ease, filter 320ms ease, transform 360ms cubic-bezier(0.32,1.22,0.36,1);
+      }
+      .dmk__cal-row--event { background: var(--cal-tint); padding: 6px 11px 7px; }
+      .dmk__cal-row--event::before { content: ""; position: absolute; left: 11px; top: 8px; bottom: 8px; width: 3px; border-radius: 2px; background: var(--cal-color); }
+      .dmk__cal-row--event .dmk__cal-row-meta { padding-left: 10px; }
+      .dmk__cal-row-meta { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+      .dmk__cal-row-title { font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .dmk__cal-row--event .dmk__cal-row-title { color: var(--cal-color); }
+      .dmk__cal-row-time { font-size: 10.5px; font-weight: 600; color: var(--cal-color); opacity: 0.92; }
+      .dmk__cal-ring {
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        border: 2px solid var(--ring-color, rgba(255,255,255,0.4));
+        flex: 0 0 auto;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 220ms ease, transform 260ms cubic-bezier(0.3,1.6,0.4,1);
+      }
+      .dmk__cal-ring img { width: 9px; height: auto; opacity: 0; transform: scale(0.4); transition: opacity 160ms ease, transform 280ms cubic-bezier(0.3,1.6,0.4,1); }
+      .dmk__cal-row.is-done .dmk__cal-ring { background: var(--ring-color); transform: scale(1.08); }
+      .dmk__cal-row.is-done .dmk__cal-ring img { opacity: 1; transform: scale(1); }
+      .dmk__cal-row.is-away { opacity: 0; filter: blur(7px); transform: scale(0.9) translateX(14px); }
+      /* Audio output picker: unfolds below the controls, reference style. */
+      .dmk__notch.is-open.is-out { height: 322px; }
+      .dmk__out { max-height: 0; opacity: 0; filter: blur(7px); overflow: hidden; transition: max-height 560ms cubic-bezier(0.32,1.22,0.36,1), opacity 360ms cubic-bezier(0.32,1.22,0.36,1), filter 440ms cubic-bezier(0.32,1.22,0.36,1); }
+      .dmk__notch.is-out .dmk__out { max-height: 160px; opacity: 1; filter: blur(0); }
+      .dmk__out-div { width: 64px; height: 1.5px; border-radius: 1px; background: rgba(255,255,255,0.22); margin: 12px auto 12px; }
+      .dmk__out-list { display: flex; flex-direction: column; gap: 9px; }
+      /* The whole capsule IS the volume slider, iOS style: a lighter     */
+      /* fill layer tracks --vol beneath the row content.                  */
+      .dmk__orow { position: relative; display: flex; align-items: center; gap: 11px; background: rgba(255,255,255,0.055); border-radius: 999px; padding: 9px 13px; cursor: ew-resize; overflow: hidden; touch-action: none; }
+      .dmk__orow::before { content: ""; position: absolute; inset: 0; width: var(--vol, 60%); background: rgba(255,255,255,0.18); pointer-events: none; }
+      .dmk__orow > * { position: relative; }
+      .dmk__orow-icon { width: 24px; height: 20px; object-fit: contain; flex: 0 0 auto; }
+      .dmk__orow-name { color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; flex: 0 0 auto; }
+      .dmk__orow-check { width: 19px; height: 19px; border-radius: 50%; background: rgba(255,255,255,0.13); margin-left: auto; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; transition: background 220ms ease; cursor: pointer; }
+      .dmk__orow-check svg { width: 11px; height: 11px; opacity: 0; transform: scale(0.3); transition: opacity 180ms ease, transform 320ms cubic-bezier(0.3, 1.6, 0.4, 1); }
+      .dmk__orow.is-current .dmk__orow-check { background: #fff; }
+      .dmk__orow.is-current .dmk__orow-check svg { opacity: 1; transform: scale(1); }
+      .dmk__notch.is-open .dmk__player { opacity: 1; transform: none; filter: blur(0); pointer-events: auto; }
+      .dmk__player-top { display: flex; align-items: center; gap: 17px; }
+      .dmk__art-wrap { position: relative; flex: 0 0 auto; cursor: pointer; transition: transform 420ms cubic-bezier(0.3, 1.65, 0.4, 1), filter 260ms ease; }
+      .dmk__art-wrap:hover { transform: scale(1.06); filter: brightness(1.12); }
+      .dmk__art-wrap.is-forced { transform: scale(0.88); filter: brightness(0.92); transition: transform 120ms cubic-bezier(0.3, 0.7, 0.4, 1), filter 120ms ease; }
+      .dmk__art { width: 69px; height: 69px; border-radius: 14px; display: block; }
+      .dmk__art-badge { position: absolute; right: 3px; bottom: 3px; width: 21px; height: 21px; display: block; }
+      .dmk__meta { flex: 1; min-width: 0; }
+      .dmk__title { color: #fff; font-size: 16.5px; font-weight: 700; display: flex; align-items: center; gap: 7px; letter-spacing: -0.01em; }
+      .dmk__badge { font-size: 10px; font-weight: 700; color: #000; background: #fff; border-radius: 5px; width: 15px; height: 15px; display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
+      .dmk__artist { color: rgba(255,255,255,0.55); font-size: 13.5px; font-weight: 500; margin-top: 3px; }
+      /* Waveform reads left-to-right with bars expanding from the        */
+      /* vertical center, like the real notch glyph.                       */
+      .dmk__player-top { position: relative; }
+      .dmk__wave { position: absolute; right: 2px; top: 22px; transform: translateY(-50%); display: flex; align-items: center; gap: 1.9px; height: 10px; }
+      .dmk__wave span { width: 2.2px; border-radius: 2px; background: linear-gradient(180deg, #9aa8ff 0%, #5d7fd4 55%, #3e5f9e 100%); height: 30%; animation: dmkWave 900ms ease-in-out infinite; }
+      .dmk__wave span:nth-child(1) { animation-delay: -120ms; }
+      .dmk__wave span:nth-child(2) { animation-delay: -430ms; }
+      .dmk__wave span:nth-child(3) { animation-delay: -700ms; }
+      .dmk__wave span:nth-child(4) { animation-delay: -80ms; }
+      .dmk__wave span:nth-child(5) { animation-delay: -540ms; }
+      .dmk__wave span:nth-child(6) { animation-delay: -300ms; }
+      .dmk__wave span:nth-child(7) { animation-delay: -620ms; }
+      .dmk.is-paused .dmk__wave span { animation: none; height: 20%; }
+      @keyframes dmkWave { 0%, 100% { height: 18%; } 50% { height: 95%; } }
+      .dmk__progress { display: flex; align-items: center; gap: 13px; margin-top: 15px; }
+      .dmk__time { color: rgba(255,255,255,0.62); font-size: 12.5px; font-weight: 500; font-variant-numeric: tabular-nums; min-width: 36px; }
+      .dmk__time:last-child { text-align: right; }
+      .dmk__bar { flex: 1; height: 7px; border-radius: 3.5px; background: rgba(255,255,255,0.24); overflow: hidden; }
+      .dmk__fill { height: 100%; width: 21%; border-radius: 3.5px; background: #fff; }
+      .dmk__controls { position: relative; display: flex; align-items: center; justify-content: center; margin-top: 12px; }
+      .dmk__transport { display: flex; align-items: center; gap: 22px; }
+      .dmk__ctl--left { position: absolute; left: 2px; top: 50%; transform: translateY(-50%); }
+      .dmk__ctl--right { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); }
+      .dmk__ctl.dmk__ctl--left:active, .dmk__ctl.dmk__ctl--right:active { transform: translateY(-50%) scale(0.8); transition: transform 100ms cubic-bezier(0.3, 0.7, 0.4, 1); }
+      .dmk__ctl { appearance: none; background: none; border: 0; color: #fff; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: 10px; transition: transform 380ms cubic-bezier(0.3, 1.65, 0.4, 1), background 200ms ease; }
+      .dmk__ctl svg { width: 31px; height: 31px; flex: 0 0 auto; }
+      .dmk__sfic { height: 20px; width: auto; flex: 0 0 auto; display: block; }
+      .dmk__ctl--aux .dmk__sfic { opacity: 0.8; }
+      .dmk__qrow-add img { opacity: 0.55; }
+      .dmk__sfic--tp { height: 22px; }
+      .dmk__ctl--play .dmk__sfic { height: 27px; }
+      .dmk__qrow-add img { height: 14px; width: auto; display: block; }
+      .dmk__ctl--aux { color: rgba(255,255,255,0.8); }
+      .dmk__ctl--aux svg { width: 22px; height: 22px; }
+      .dmk__ctl:hover { background: rgba(255,255,255,0.1); }
+      .dmk__ctl:active { transform: scale(0.8); transition: transform 100ms cubic-bezier(0.3, 0.7, 0.4, 1); }
+      .dmk__ctl--play svg { width: 39px; height: 39px; flex: 0 0 39px; }
+      .dmk__icon-play { display: none; }
+      .dmk.is-paused .dmk__icon-pause { display: none; }
+      .dmk.is-paused .dmk__icon-play { display: block; }
+      .dmk__clip { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); width: 94%; background: #000; border: 1px solid rgba(255,255,255,0.08); border-bottom: 0; border-radius: 26px 26px 0 0; padding: 11px 12px 12px; z-index: 2; }
+      /* Bottom fillets: the bar flares outward into the screen's bottom  */
+      /* edge, mirroring how the notch shell attaches at the top.         */
+      .dmk__clip::before, .dmk__clip::after { content: ""; position: absolute; bottom: 0; width: 22px; height: 22px; pointer-events: none; }
+      .dmk__clip::before { left: -21px; background: radial-gradient(circle farthest-side at 0 0, transparent calc(100% - 0.5px), #000 100%); }
+      .dmk__clip::after { right: -21px; background: radial-gradient(circle farthest-side at 100% 0, transparent calc(100% - 0.5px), #000 100%); }
+      .dmk__clip-tabs { position: relative; display: flex; align-items: center; justify-content: center; gap: 2px; margin-bottom: 11px; }
+      .dmk__tab { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 7px; height: 29px; padding: 0 12px; flex: 0 0 auto; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.88); white-space: nowrap; }
+      .dmk__tab svg { width: 13px; height: 13px; }
+      .dmk__tab.is-active { color: #fff; }
+      /* One pill glides between categories instead of blinking over. */
+      .dmk__ctab-ind {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 29px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.15);
+        pointer-events: none;
+        transition: left 380ms cubic-bezier(0.32,1.22,0.36,1), width 380ms cubic-bezier(0.32,1.22,0.36,1);
+      }
+      .dmk__tab-circle { width: 29px; height: 29px; flex: 0 0 auto; border-radius: 50%; background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.8); display: inline-flex; align-items: center; justify-content: center; }
+      .dmk__tab-circle svg { width: 13px; height: 13px; display: block; }
+      .dmk__dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+      .dmk__clip-row { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; cursor: grab; -webkit-overflow-scrolling: touch; touch-action: pan-x; }
+      .dmk__tab { cursor: pointer; transition: color 180ms ease; }
+      /* Empty pinboard: pin glyph + title + hint, centered where the row  */
+      /* of cards normally sits.                                            */
+      .dmk__clip-empty {
+        display: none;
+        height: 158px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        opacity: 0;
+        transform: scale(0.96);
+        filter: blur(5px);
+        transition: opacity 300ms cubic-bezier(0.32,1.22,0.36,1), transform 420ms cubic-bezier(0.32,1.22,0.36,1), filter 340ms cubic-bezier(0.32,1.22,0.36,1);
+      }
+      .dmk__clip.is-board .dmk__clip-empty { display: flex; opacity: 1; transform: none; filter: blur(0); }
+      .dmk__clip.is-board .dmk__clip-row { display: none; }
+      /* Search mode: the capsule morphs out of the search circle as one  */
+      /* geometry, overlaying the tabs row so the strip never grows.       */
+      .dmk__clip.is-search .dmk__clip-tabs { opacity: 0; filter: blur(5px); pointer-events: none; }
+      .dmk__clip-tabs { transition: opacity 240ms ease, filter 300ms ease; }
+      .dmk__clip-search {
+        position: absolute;
+        top: 11px;
+        height: 29px;
+        border-radius: 999px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 8px;
+        box-sizing: border-box;
+        background: rgba(255,255,255,0.07);
+        left: 0;
+        width: 29px;
+        opacity: 0;
+        pointer-events: none;
+        overflow: hidden;
+        transition: left 420ms cubic-bezier(0.32,1.22,0.36,1), width 420ms cubic-bezier(0.32,1.22,0.36,1), padding 420ms cubic-bezier(0.32,1.22,0.36,1), opacity 140ms ease 300ms;
+      }
+      .dmk__clip.is-search .dmk__clip-search { opacity: 1; pointer-events: auto; transition: left 420ms cubic-bezier(0.32,1.22,0.36,1), width 420ms cubic-bezier(0.32,1.22,0.36,1), padding 420ms cubic-bezier(0.32,1.22,0.36,1), opacity 120ms ease; }
+      .dmk__clip-search svg { width: 13px; height: 13px; color: rgba(255,255,255,0.8); flex: 0 0 auto; }
+      .dmk__clip-search input {
+        flex: 1;
+        min-width: 0;
+        background: none;
+        border: none;
+        outline: none;
+        color: #fff;
+        font-size: 13.5px;
+        font-weight: 500;
+        font-family: inherit;
+        caret-color: #0A84FF;
+        opacity: 0;
+        transition: opacity 200ms ease 180ms;
+      }
+      .dmk__clip.is-search-in .dmk__clip-search input { opacity: 1; }
+      .dmk__clip-search input::placeholder { color: rgba(255,255,255,0.4); }
+      .dmk__clip-empty img { width: 17px; height: auto; opacity: 0.45; margin-bottom: 6px; }
+      .dmk__clip-empty-title { color: rgba(255,255,255,0.82); font-size: 14.5px; font-weight: 700; }
+      .dmk__clip-empty-sub { color: rgba(255,255,255,0.4); font-size: 12.5px; font-weight: 500; }
+      .dmk__clip-row::-webkit-scrollbar { display: none; }
+      .dmk__clip-row.is-dragging { cursor: grabbing; }
+      .dmk__clip-more { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.65); display: flex; align-items: center; }
+      .dmk__clip-more svg { width: 15px; height: 15px; display: block; }
+      .dmk__card { position: relative; flex: 0 0 188px; background: #131315; border-radius: 15px; overflow: hidden; user-select: none; display: flex; flex-direction: column; height: 158px; }
+      .dmk__card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1.6px rgba(255,255,255,0.92); opacity: 0; transition: opacity 280ms ease; pointer-events: none; z-index: 2; }
+      .dmk__card.is-selected::after { opacity: 1; }
+      .dmk__card-head { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 8px 52px 8px 11px; background: linear-gradient(180deg, #3d3d3f 0%, #353537 100%); min-height: 37px; }
+      .dmk__card--pin .dmk__card-head { background: linear-gradient(180deg, #3d7ce0 0%, #2b5fc2 100%); }
+      .dmk__card--pin-work .dmk__card-head { background: linear-gradient(180deg, #43b57c 0%, #379a68 100%); }
+      .dmk__card--pin-prompts .dmk__card-head { background: linear-gradient(180deg, #e8635b 0%, #cc4f48 100%); }
+      .dmk__card-kind { color: #fff; font-size: 11.5px; font-weight: 700; line-height: 1.15; }
+      .dmk__card-when { color: rgba(255,255,255,0.55); font-size: 9.5px; margin-top: 1px; }
+      .dmk__card--pin .dmk__card-when { color: rgba(255,255,255,0.75); }
+      /* Real source-app icon: oversized, hugging the header's top-right   */
+      /* corner and cropped by the card edge, like the real strip.         */
+      .dmk__card-appimg { position: absolute; top: -2px; right: -9px; width: 47px; height: 47px; pointer-events: none; }
+      .dmk__card-app { position: absolute; top: 8px; right: 11px; color: #fff; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+      .dmk__card-app svg { width: 19px; height: 19px; }
+      .dmk__card-body { position: relative; flex: 1; overflow: hidden; padding: 8px 11px 26px; color: rgba(255,255,255,0.92); font-size: 9.8px; line-height: 1.45; overflow-wrap: anywhere; word-break: break-word; }
+      .dmk__card-body--img { padding: 8px 8px 8px; }
+      .dmk__card-img { position: relative; width: 100%; height: 100%; border-radius: 8px; overflow: hidden; background: #0b0d10; }
+      .dmk__card-img img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; display: block; }
+      .dmk__chip { position: absolute; bottom: 6px; display: inline-flex; align-items: center; gap: 4px; font-size: 8.8px; font-weight: 600; color: #fff; background: rgba(22, 22, 24, 0.8); border-radius: 999px; padding: 3.5px 9px; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
+      .dmk__chip--left { left: 7px; }
+      .dmk__chip--right { right: 7px; }
+      .dmk__chip svg { width: 9px; height: 9px; }
+      .dmk__chip .dmk__star { color: #ffd60a; font-size: 10px; margin-right: 1px; }
+      .dmk__card-body > .dmk__chip { bottom: 8px; }
+      .dmk__card-body > .dmk__chip--left { left: 11px; }
+      .dmk__card-body > .dmk__chip--right { right: 11px; }
+      @media (max-width: 720px) {
+        /* Phones: keep the pixel-sized mock UI legible by trading the      */
+        /* widescreen aspect for a taller frame instead of shrinking it.    */
+        .dmk { aspect-ratio: auto; height: 470px; }
+        .dmk__screen { -webkit-backdrop-filter: none; backdrop-filter: none; }
+        /* No glass on phones (backdrop-filter is off above), so the glass
+           stand-in has nothing to stand in for and would read as a stray
+           blurred plate over the sharp art. */
+        .dmk__preblur { display: none; }
+        .dmk__menubar { padding: 0 10px; }
+        .dmk__mb-left { gap: 8px; }
+        .dmk__mb-right { gap: 10px; }
+        .dmk__mb-app, .dmk__mb-ic { display: none; }
+        .dmk__mb-demo { font-size: 11px; }
+        .dmk__clock { font-size: 11px; white-space: nowrap; }
+        .dmk__hint { left: 22px; transform: none; }
+        .dmk__desk { top: 46px; right: 10px; grid-template-columns: repeat(2, 82px); gap: 16px 4px; }
+        .dmk__tray { padding: 0 12px; }
+        .dmk__tray-files { gap: 14px; }
+        .dmk__notch { width: 128px; height: 25px; }
+        .dmk__notch.is-mini { width: 146px; }
+        .dmk__notch.is-shud { width: min(390px, 94%); }
+        .dmk__desk .dmk__dicon:nth-child(5) { display: none; }
+        .dmk__notch.is-open { width: 94%; height: 184px; }
+        .dmk__notch.is-qa { width: 94%; }
+        .dmk__notch.is-open.is-out { height: 296px; }
+        .dmk__clip { width: 97%; }
+        /* Open notch: the player column was a fixed 350px while the     */
+        /* shell opens to ~317px here; make it fluid and compact.        */
+        .dmk__main { flex: 0 0 auto; width: 100%; padding: 18px 16px 12px; }
+        .dmk__player { flex-direction: column; }
+        .dmk__player-top { gap: 13px; }
+        .dmk__art { width: 60px; height: 60px; border-radius: 12px; }
+        .dmk__title { font-size: 15px; }
+        .dmk__artist { font-size: 12.5px; }
+        .dmk__wave { right: 0; top: 18px; }
+        .dmk__progress { margin-top: 12px; gap: 10px; }
+        .dmk__time { min-width: 30px; font-size: 11.5px; }
+        .dmk__transport { gap: 12px; }
+        .dmk__ctl { width: 36px; height: 36px; }
+        .dmk__ctl--aux { width: 40px; height: 40px; }
+        .dmk__ctl svg { width: 27px; height: 27px; }
+        .dmk__ctl--play svg { width: 34px; height: 34px; flex-basis: 34px; }
+        /* Queue: no width for a side column on phones, so the shell     */
+        /* grows down and the queue stacks under the player instead.     */
+        .dmk__queue { display: none; }
+        .dmk__notch.is-open.is-queue { width: 94%; height: 380px; }
+        .dmk__notch.is-open.is-queue .dmk__queue { display: flex; flex: 1; min-height: 0; border-left: 0; border-top: 1px solid rgba(255,255,255,0.12); margin: 0 16px 14px; padding: 12px 2px 0; }
+        .dmk__queue-list { touch-action: pan-y; }
+        /* The tall queue sheet needs the floor: tuck the lane and fade   */
+        /* the clipboard bar while it is open.                            */
+        .dmk__notch.is-open.is-queue .dmk__lane { opacity: 0; pointer-events: none; }
+        /* Clipboard bar: compact tabs that fit, scrolling safely if not. */
+        .dmk__clip-tabs { gap: 2px; overflow-x: auto; scrollbar-width: none; justify-content: safe center; }
+        .dmk__tab { padding: 0 8px; height: 27px; font-size: 12px; gap: 5px; }
+        .dmk__tab svg { width: 11px; height: 11px; }
+      }
+
+      /* Component resets above remove native outlines. Restore the shared
+         keyboard treatment with enough specificity to win the real cascade. */
+      :is(.pricing2__seg button, .pricing2__cta, .purchase-back, .dmk__notch):focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 3px;
+      }

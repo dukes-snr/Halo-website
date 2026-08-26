@@ -1,23 +1,25 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Bitcount_Prop_Single, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Source_Serif_4 } from "next/font/google";
+import Script from "next/script";
 import { ChromeGate } from "@/components/layout/ChromeGate";
 import { site } from "@/lib/content";
 import "./globals.css";
 
-const montreal = localFont({
+const satoshi = localFont({
   src: [
     { path: "../public/fonts/Satoshi-Regular.woff2", weight: "400" },
     { path: "../public/fonts/Satoshi-Medium.woff2", weight: "500" },
   ],
-  variable: "--font-montreal",
+  variable: "--font-satoshi",
   display: "swap",
 });
 
-const mondwest = Bitcount_Prop_Single({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  weight: "700",
-  variable: "--font-mondwest",
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-source-serif",
   display: "swap",
 });
 
@@ -37,6 +39,18 @@ export const metadata: Metadata = {
     description: site.description,
     type: "website",
   },
+  keywords: [
+    "Dynamic Island Windows",
+    "Windows notch",
+    "Windows mascot notch",
+    "on-device AI Windows",
+    "Whisper desktop assistant",
+    "Gemma local assistant",
+    "media controller Windows",
+    "file shelf",
+    "Control Center Windows",
+    "desktop notes",
+  ],
 };
 
 export default function RootLayout({
@@ -47,10 +61,30 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${montreal.variable} ${mondwest.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${satoshi.variable} ${sourceSerif.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-page text-ink">
+      <body className="flex min-h-full flex-col bg-paper text-ink">
+        <div
+          dangerouslySetInnerHTML={{
+            __html: [
+              "<!-- DIRECTION CONTRACT",
+              "THESIS: Halo is an editorial product catalog. A plain white field and a living desktop demo sell the notch; this page refuses the sun-yellow sticker shop and the SaaS metric-tile hero.",
+              "OWN-WORLD: White paper #FFFFFF, ink #111111, hairline #E8E8E4, Source Serif 4 display (roman + italic) with Satoshi body, black pill CTAs, soft ambient shadows, Dia-style pastel stages only behind product footage.",
+              "STORY: The visitor reads a calm offer, watches the notch work inside a framed desktop, pages through stations on pastel stages, and reaches Download.",
+              "FIRST VIEWPORT: Flush white nav (wordmark, quiet links, black Download); centered serif headline with italic close; black CTA; large rounded interactive desktop.",
+              "FORM: Brief-pinned editorial catalog from attached SaaS showcase + Dia LP; seed roll waived by pinned references.",
+              "FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.",
+              "-->",
+            ].join("\n"),
+          }}
+        />
         <ChromeGate>{children}</ChromeGate>
+        {/* impeccable-live-start */}
+        <Script
+          src="http://localhost:8400/live.js?token=64636e39-1fa3-45cf-944d-e71ebfb95696"
+          strategy="afterInteractive"
+        />
+        {/* impeccable-live-end */}
       </body>
     </html>
   );

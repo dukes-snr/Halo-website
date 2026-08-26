@@ -3,59 +3,95 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
-import { nav, site } from "@/lib/content";
+import { Logo } from "@/components/brand/Logo";
+import { WindowsIcon } from "@/components/ui/WindowsIcon";
+
+const links = [
+  { href: "/features", label: "Features" },
+  { href: "/mascot", label: "Mascot" },
+  { href: "/privacy", label: "Privacy" },
+];
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  if (pathname === "/") return null;
-
   return (
-    <header className="relative mx-auto flex w-full max-w-[1200px] items-center justify-between px-6 pt-10 pb-4">
-      <Link
-        href="/"
-        className="font-display text-[28px] font-semibold tracking-tight text-ink"
-      >
-        {site.name}
-      </Link>
-      <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
-        {nav.primary.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="text-sm text-ink transition-opacity hover:opacity-70"
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
-      <button
-        type="button"
-        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 lg:hidden"
-        aria-expanded={open}
-        aria-label={open ? "Close menu" : "Open menu"}
-        onClick={() => setOpen((v) => !v)}
-      >
-        {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-      </button>
-      {open ? (
-        <div className="absolute top-20 right-6 left-6 z-40 rounded-[24px] bg-white p-4 shadow-card lg:hidden">
-          <nav className="flex flex-col" aria-label="Mobile">
-            {nav.primary.map((item) => (
+    <header className="sticky top-0 z-50 bg-paper/85 backdrop-blur-md">
+      <div className="mx-auto flex h-[72px] w-full max-w-[1120px] items-center justify-between px-5 md:px-8">
+        <Link href="/" aria-label="Halo home" onClick={() => setOpen(false)}>
+          <Logo />
+        </Link>
+
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+          {links.map((item) => {
+            const active = pathname === item.href;
+            return (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-xl px-3 py-2.5 text-[15px] text-ink"
-                onClick={() => setOpen(false)}
+                className={`text-[14px] transition-colors ${
+                  active ? "text-ink" : "text-ink/55 hover:text-ink"
+                }`}
               >
                 {item.label}
               </Link>
-            ))}
-          </nav>
-        </div>
-      ) : null}
+            );
+          })}
+          <Link
+            href="/download"
+            className="inline-flex h-9 items-center gap-1.5 rounded-full bg-ink px-4 text-[13px] font-medium text-paper transition-colors hover:bg-ink/90"
+          >
+            <WindowsIcon className="h-3.5 w-3.5" />
+            Download for Windows
+          </Link>
+        </nav>
+
+        <button
+          type="button"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full text-ink md:hidden"
+          aria-expanded={open}
+          aria-label={open ? "Close menu" : "Open menu"}
+          onClick={() => setOpen((value) => !value)}
+        >
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="border-t border-line bg-paper px-5 py-4 md:hidden"
+          >
+            <nav className="flex flex-col" aria-label="Mobile">
+              {links.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="py-3 font-display text-[22px] text-ink/70 hover:text-ink"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <Link
+                href="/download"
+                className="mt-3 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-ink text-[14px] font-medium text-paper"
+                onClick={() => setOpen(false)}
+              >
+                <WindowsIcon />
+                Download for Windows
+              </Link>
+            </nav>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </header>
   );
 }

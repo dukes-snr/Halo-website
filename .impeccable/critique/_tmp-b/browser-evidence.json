@@ -1,0 +1,509 @@
+{
+  "url": "http://localhost:3000/",
+  "nativeOverlay": false,
+  "injection": "skipped",
+  "liveServer": "not started",
+  "fallbackSignal": "no user-visible overlay; CLI detector + headless screenshots",
+  "consoleImpeccable": [],
+  "desktop": {
+    "facts": {
+      "title": "Halo - Dynamic Island for Windows",
+      "url": "http://localhost:3000/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "scroll": {
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "overflowXPx": 0,
+        "overflowYPx": 5770,
+        "documentOverflowX": false
+      },
+      "overflowingSample": [
+        {
+          "tag": "div",
+          "id": null,
+          "className": "pointer-events-none absolute -left-28 top-40 h-80 w-80 rounded-full border-[2.5px] border-ink/10",
+          "left": -112,
+          "right": 208,
+          "width": 320,
+          "overflow": "visible"
+        },
+        {
+          "tag": "div",
+          "id": null,
+          "className": "pointer-events-none absolute -right-20 top-[52%] h-96 w-96 rounded-full border-[2.5px] border-ink/10",
+          "left": 1136,
+          "right": 1520,
+          "width": 384,
+          "overflow": "visible"
+        },
+        {
+          "tag": "div",
+          "id": null,
+          "className": "dmk__widget",
+          "left": 1430,
+          "right": 1493,
+          "width": 63,
+          "overflow": "visible"
+        },
+        {
+          "tag": "img",
+          "id": null,
+          "className": "",
+          "left": 1436,
+          "right": 1487,
+          "width": 50,
+          "overflow": "clip"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "",
+          "left": 1428,
+          "right": 1495,
+          "width": 67,
+          "overflow": "hidden"
+        },
+        {
+          "tag": "div",
+          "id": null,
+          "className": "dmk__widget",
+          "left": 1515,
+          "right": 1578,
+          "width": 63,
+          "overflow": "visible"
+        },
+        {
+          "tag": "img",
+          "id": null,
+          "className": "",
+          "left": 1521,
+          "right": 1571,
+          "width": 50,
+          "overflow": "clip"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "",
+          "left": 1513,
+          "right": 1580,
+          "width": 67,
+          "overflow": "hidden"
+        },
+        {
+          "tag": "div",
+          "id": null,
+          "className": "dmk__widget",
+          "left": 1599,
+          "right": 1662,
+          "width": 63,
+          "overflow": "visible"
+        },
+        {
+          "tag": "img",
+          "id": null,
+          "className": "",
+          "left": 1606,
+          "right": 1656,
+          "width": 50,
+          "overflow": "clip"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "",
+          "left": 1598,
+          "right": 1664,
+          "width": 67,
+          "overflow": "hidden"
+        },
+        {
+          "tag": "div",
+          "id": null,
+          "className": "dmk__widget",
+          "left": 1684,
+          "right": 1747,
+          "width": 63,
+          "overflow": "visible"
+        },
+        {
+          "tag": "img",
+          "id": null,
+          "className": "",
+          "left": 1690,
+          "right": 1741,
+          "width": 50,
+          "overflow": "clip"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "",
+          "left": 1682,
+          "right": 1749,
+          "width": 67,
+          "overflow": "hidden"
+        },
+        {
+          "tag": "div",
+          "id": null,
+          "className": "dmk__widget",
+          "left": 1769,
+          "right": 1832,
+          "width": 63,
+          "overflow": "visible"
+        },
+        {
+          "tag": "img",
+          "id": null,
+          "className": "",
+          "left": 1775,
+          "right": 1825,
+          "width": 50,
+          "overflow": "clip"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "",
+          "left": 1767,
+          "right": 1833,
+          "width": 67,
+          "overflow": "hidden"
+        },
+        {
+          "tag": "div",
+          "id": null,
+          "className": "dmk__widget",
+          "left": 1853,
+          "right": 1916,
+          "width": 63,
+          "overflow": "visible"
+        },
+        {
+          "tag": "img",
+          "id": null,
+          "className": "",
+          "left": 1859,
+          "right": 1910,
+          "width": 50,
+          "overflow": "clip"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "",
+          "left": 1851,
+          "right": 1918,
+          "width": 67,
+          "overflow": "hidden"
+        }
+      ],
+      "imageCount": 103,
+      "brokenImages": [],
+      "h1": "Your Windows desktopfinally has a notchworth using."
+    },
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "Images loaded lazily and replaced with placeholders. Load events are deferred. See https://go.microsoft.com/fwlink/?linkid=2048113",
+        "location": {
+          "url": "http://localhost:3000/",
+          "lineNumber": 186
+        }
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js",
+          "lineNumber": 776,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js",
+          "lineNumber": 776,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [
+      {
+        "url": "http://localhost:3000/videos/halo-media.mp4",
+        "method": "GET",
+        "failure": "net::ERR_ABORTED",
+        "resourceType": "media"
+      },
+      {
+        "url": "http://localhost:3000/videos/halo-dynamic-notch-demo.mp4",
+        "method": "GET",
+        "failure": "net::ERR_ABORTED",
+        "resourceType": "media"
+      }
+    ]
+  },
+  "mobile": {
+    "facts": {
+      "title": "Halo - Dynamic Island for Windows",
+      "url": "http://localhost:3000/",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "scroll": {
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "overflowXPx": 0,
+        "overflowYPx": 5918,
+        "documentOverflowX": false
+      },
+      "overflowingSample": [
+        {
+          "tag": "div",
+          "id": null,
+          "className": "pointer-events-none absolute -left-28 top-40 h-80 w-80 rounded-full border-[2.5px] border-ink/10",
+          "left": -112,
+          "right": 208,
+          "width": 320,
+          "overflow": "visible"
+        },
+        {
+          "tag": "div",
+          "id": null,
+          "className": "pointer-events-none absolute -right-20 top-[52%] h-96 w-96 rounded-full border-[2.5px] border-ink/10",
+          "left": 86,
+          "right": 470,
+          "width": 384,
+          "overflow": "visible"
+        },
+        {
+          "tag": "div",
+          "id": null,
+          "className": "dmk__tfile is-in",
+          "left": 369,
+          "right": 432,
+          "width": 63,
+          "overflow": "visible"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "dmk__tfile-thumb",
+          "left": 375,
+          "right": 425,
+          "width": 50,
+          "overflow": "visible"
+        },
+        {
+          "tag": "img",
+          "id": null,
+          "className": "",
+          "left": 375,
+          "right": 425,
+          "width": 50,
+          "overflow": "clip"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "dmk__tfile-check",
+          "left": 396,
+          "right": 404,
+          "width": 8,
+          "overflow": "visible"
+        },
+        {
+          "tag": "svg",
+          "id": null,
+          "className": "",
+          "left": 398,
+          "right": 402,
+          "width": 4,
+          "overflow": "hidden"
+        },
+        {
+          "tag": "polyline",
+          "id": null,
+          "className": "",
+          "left": 399,
+          "right": 401,
+          "width": 2,
+          "overflow": "visible"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "dmk__tfile-x",
+          "left": 417,
+          "right": 429,
+          "width": 12,
+          "overflow": "visible"
+        },
+        {
+          "tag": "svg",
+          "id": null,
+          "className": "",
+          "left": 420,
+          "right": 425,
+          "width": 5,
+          "overflow": "hidden"
+        },
+        {
+          "tag": "line",
+          "id": null,
+          "className": "",
+          "left": 421,
+          "right": 424,
+          "width": 2,
+          "overflow": "visible"
+        },
+        {
+          "tag": "line",
+          "id": null,
+          "className": "",
+          "left": 421,
+          "right": 424,
+          "width": 2,
+          "overflow": "visible"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "dmk__tfile-name",
+          "left": 378,
+          "right": 422,
+          "width": 44,
+          "overflow": "hidden"
+        },
+        {
+          "tag": "div",
+          "id": null,
+          "className": "dmk__tfile is-in",
+          "left": 444,
+          "right": 507,
+          "width": 63,
+          "overflow": "visible"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "dmk__tfile-thumb",
+          "left": 451,
+          "right": 501,
+          "width": 50,
+          "overflow": "visible"
+        },
+        {
+          "tag": "img",
+          "id": null,
+          "className": "",
+          "left": 451,
+          "right": 501,
+          "width": 50,
+          "overflow": "clip"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "dmk__tfile-check",
+          "left": 472,
+          "right": 480,
+          "width": 8,
+          "overflow": "visible"
+        },
+        {
+          "tag": "svg",
+          "id": null,
+          "className": "",
+          "left": 474,
+          "right": 478,
+          "width": 4,
+          "overflow": "hidden"
+        },
+        {
+          "tag": "polyline",
+          "id": null,
+          "className": "",
+          "left": 475,
+          "right": 477,
+          "width": 2,
+          "overflow": "visible"
+        },
+        {
+          "tag": "span",
+          "id": null,
+          "className": "dmk__tfile-x",
+          "left": 492,
+          "right": 504,
+          "width": 12,
+          "overflow": "visible"
+        }
+      ],
+      "imageCount": 103,
+      "brokenImages": [],
+      "h1": "Your Windows desktopfinally has a notchworth using."
+    },
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "Images loaded lazily and replaced with placeholders. Load events are deferred. See https://go.microsoft.com/fwlink/?linkid=2048113",
+        "location": {
+          "url": "http://localhost:3000/",
+          "lineNumber": 186
+        }
+      },
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js",
+          "lineNumber": 776,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_1e8vcs8._.js",
+          "lineNumber": 776,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [
+      {
+        "url": "http://localhost:3000/videos/halo-dynamic-notch-demo.mp4",
+        "method": "GET",
+        "failure": "net::ERR_ABORTED",
+        "resourceType": "media"
+      },
+      {
+        "url": "http://localhost:3000/videos/halo-media.mp4",
+        "method": "GET",
+        "failure": "net::ERR_ABORTED",
+        "resourceType": "media"
+      }
+    ]
+  },
+  "screenshots": [
+    "E:\\code\\Github\\Halo web\\.impeccable\\critique\\_tmp-b\\desktop-1440x900.png",
+    "E:\\code\\Github\\Halo web\\.impeccable\\critique\\_tmp-b\\desktop-stations.png",
+    "E:\\code\\Github\\Halo web\\.impeccable\\critique\\_tmp-b\\desktop-footer.png",
+    "E:\\code\\Github\\Halo web\\.impeccable\\critique\\_tmp-b\\desktop-notch-open.png",
+    "E:\\code\\Github\\Halo web\\.impeccable\\critique\\_tmp-b\\mobile-390x844.png",
+    "E:\\code\\Github\\Halo web\\.impeccable\\critique\\_tmp-b\\mobile-footer.png"
+  ],
+  "notchClicked": true
+}

@@ -1,0 +1,847 @@
+{
+  "product": "Halo",
+  "platform": "Windows",
+  "generated_at": "2026-08-24T00:00:00.000Z",
+  "launch_version": "1.0.0",
+  "current_diary_version": "0.10.0",
+  "package_identity_version": "0.1.1.0",
+  "visible_items_per_group": 5,
+  "note": "Halo has not launched. Public site versions are 0.x product-diary numbers, not the 1.0 release and not necessarily the MSIX identity. Hide items with published=false.",
+  "releases": [
+    {
+      "version": "unreleased",
+      "date": null,
+      "published": false,
+      "channel": "development",
+      "headline": "Toward 1.0: floating surface, clipboard library, workspaces, signed updates",
+      "summary": "Work in the tree between 0.10.0 and launch. Do not render on the public changelog until it ships.",
+      "screenshots": [],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added a floating island path so Halo can sit as a self-contained pill on displays that have no camera housing.",
+            "Added named workspaces for Home layout, widget styles, and enabled modules, including per-display binding.",
+            "Added a Clipboard Library window with search, filters, list/grid/board views, and bulk actions; the notch stays a 40-item hot cache.",
+            "Added on-device OCR indexing, sensitive-content masking, Quick Paste, and paste sequences.",
+            "Added a signed direct-MSIX update path with truthful Idle, Checking, Available, Downloading, Ready, Current, and Failed states.",
+            "Added a versioned first-party module catalog and a signed external-provider contract.",
+            "Added durable file-shelf operations with queued copy, move, and convert.",
+            "Added per-display surface profiles that survive unplug and topology changes.",
+            "Added a diagnostics bundle, idle performance telemetry, and a single-instance guard.",
+            "Added settings schema migrations and recovery for a bad JSON file."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Replaced the Settings Store-launcher dead end with a real checker that fails closed until production signing pins exist.",
+            "Hardened clipboard persistence onto SQLite with size budgets and sensitivity rules.",
+            "Tightened display identity so mixed-DPI and hot-plug no longer collapse every monitor into the first one seen."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Split accessibility and privacy into an explicit pre-1.0 gate.",
+            "Kept the live Home row at six tiles even as the catalog and workspaces grow.",
+            "Documented the public site needs that 1.0 still owes: download verification, changelog, privacy, and support."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.10.0",
+      "date": "2026-08-23",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Live Activities, and a new face for Halo",
+      "summary": "The notch can host a primary live card plus compact secondaries, and Halo finally has its own brand.",
+      "git": "3b06c55",
+      "screenshots": [
+        {
+          "path": "screenshots/implementation-media-playing-next.png",
+          "alt": "Halo 0.10.0: expanded media with Playing Next as a live activity."
+        },
+        {
+          "path": "screenshots/feature-event-reminder.png",
+          "alt": "Halo 0.10.0: calendar event reminder as a live activity with Focus, Snooze, Dismiss, and Join."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added a Live Activity coordinator so media, timers, the assistant, calendar, downloads, notifications, apps, file operations, calls, recording, transcription, and exports share one arbitration model.",
+            "Added live-activity actions on the surface so a timer, a meeting, or a download can be handled without opening Settings.",
+            "Added a new Halo brand system: redrawn app icons at every Windows target size, store listing tiles, and a master logo.",
+            "Added richer clipboard item metadata so Clips can participate in live-activity promotion.",
+            "Added live-activity tests for coordinator policy and on-surface metrics."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed Settings, Notes, Notification Center, and Onboarding windows mixing leftover placeholder logos.",
+            "Fixed avatar peek painting and expression timing after the Live Activity chrome landed.",
+            "Fixed media session artwork and source-app badges on live cards."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Rebuilt Settings around the live-activity era, including a Surface preview that pushes Home, Media, Timer, Call, Notification, or Tray onto the real notch.",
+            "Tightened geometry so compact secondary indicators stay small and never compete with the primary title.",
+            "Softened onboarding and tray-icon copy to match the new mark.",
+            "Kept the outer canvas optically pure black.",
+            "Updated presentation geometry so a promoted activity morphs with the existing spring."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.9.0",
+      "date": "2026-08-21",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Every Home widget gets its own look",
+      "summary": "Clock, apps, battery, weather, and new utility tiles remember how you like them drawn.",
+      "git": "e7711b2",
+      "screenshots": [
+        {
+          "path": "screenshots/feature-home-dashboard.png",
+          "alt": "Halo 0.9.0: Home dashboard with restyleable widgets."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added persistent per-widget display styles for Clock, Apps, Battery, Weather, and Microphone.",
+            "Added eleven Clock presentations: digital + date, flip, recording, countdown, date + weather, focus, calendar day, stopwatch, analog, digital + seconds, and minimal digital.",
+            "Added Apps styles: launcher glyph, live folder, and color folder.",
+            "Added Battery charging vs. level, Weather temperature vs. condition, and Microphone level vs. waveform.",
+            "Added Downloads, Processor, and Microphone as first-class Home widgets, with a real CPU sampler.",
+            "Added interactive Clock modes for timer, countdown, stopwatch, and focus from the Home row.",
+            "Added layout math that respects each style’s own width."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed Home hit-testing so a restyled wider or narrower tile still receives the click meant for it.",
+            "Fixed module-board previews drifting from the live notch after style changes."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Kept the live Home row at six tiles. Style is a presentation choice, not a seventh widget.",
+            "Preserved 84-DIP row height and the 124-pixel reference canvases.",
+            "Wired the module board to the new style catalog so editor and notch read the same data."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.8.0",
+      "date": "2026-08-18",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Capture, weather, modules, and a Home you can rearrange",
+      "summary": "Halo becomes a kit: sixteen widget kinds, a module catalog, screen capture, weather, High Alert, and a command palette.",
+      "git": "7a8a59c",
+      "screenshots": [
+        {
+          "path": "screenshots/feature-home-dashboard.png",
+          "alt": "Halo 0.8.0: Home dashboard with rearrangeable widgets."
+        },
+        {
+          "path": "screenshots/feature-control-center.png",
+          "alt": "Halo 0.8.0: Control Center from time and battery."
+        },
+        {
+          "path": "screenshots/implementation-apps.png",
+          "alt": "Halo 0.8.0: favorite apps with real shell icons."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added a Home widget board with sixteen kinds: Radio, Clock, Weather, Apps, Battery, Media, Next Event, Notes, Timer, Quick Toggles, Outputs, Notify, Downloads, Processor, Microphone, and Utilities.",
+            "Added a visual module catalog of fifteen first-party modules with enable, disable, and reorder.",
+            "Added screen capture for region, window, and fullscreen, with annotation stamps and a color picker overlay.",
+            "Added a command palette for jumping to Halo actions without hunting Settings.",
+            "Added Open-Meteo weather on Home, consent-first, with no account.",
+            "Added High Alert stay-awake so the PC can refuse sleep when you asked it to keep working.",
+            "Added Pomodoro sessions as a first-party timer mode.",
+            "Added TermiNotch, an in-notch ConPTY terminal, plus a hotkey to toggle it.",
+            "Added window snap layouts and Explorer Send to Halo.",
+            "Added meeting hotkeys and extra call actions: mute, camera, and share.",
+            "Added media source lock and side buttons so a chosen player keeps the notch.",
+            "Added note markup, a notification inbox, clip inbox, audio-peak visualization, camera framing, and private convert jobs.",
+            "Added Focus Assist probing so notification policy can respect Windows quiet mode.",
+            "Added rebindable hotkeys for capture, color pick, command palette, pinned note, and the terminal.",
+            "Added clipboard history limits and echo suppression so pasting does not recapture itself."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed notification conversation tracking so replies and reactions stay attached to the toast they came from.",
+            "Fixed drop-action filtering so Convert, Zip, Unzip, and Play in Music only appear when the files can use them.",
+            "Fixed localization gaps for the new drop actions, modules, and capture commands across all ten languages."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Extended media transport and routing so queue, output, and lock state survive the new Home composer.",
+            "Tightened default drop actions to a four-chip strip: Shelf, Share, Convert, Zip.",
+            "Gave Home a composer of its own rather than painting modules as one-off hub branches.",
+            "Kept capture, weather, and High Alert as real services with tests, not decorative toggles.",
+            "Added dashboard visual assets so the marketing site could show Home as a product."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.7.0",
+      "date": "2026-08-17",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Playing Next, outputs, calendar tasks, a floating dock",
+      "summary": "Expanded media grows a queue and a speaker picker. Calendar grows tasks. The station bar can leave the top edge.",
+      "git": "19fc5a1",
+      "screenshots": [
+        {
+          "path": "screenshots/implementation-media-expanded.png",
+          "alt": "Halo 0.7.0: expanded media player."
+        },
+        {
+          "path": "screenshots/implementation-media-playing-next.png",
+          "alt": "Halo 0.7.0: Playing Next overlay on expanded media."
+        },
+        {
+          "path": "screenshots/feature-calendar.png",
+          "alt": "Halo 0.7.0: calendar week, agenda, and tasks."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added a Playing Next overlay on expanded media so the upcoming queue is a real surface.",
+            "Added an audio output picker on expanded media: enumerate playback devices and switch the default.",
+            "Added calendar tasks beside Windows appointments, with a phrase parser for dated tasks.",
+            "Added a station-placement setting for a floating bottom dock.",
+            "Added Spotify Connect queue APIs and wider OAuth scopes.",
+            "Added clipboard paste actions and tighter deduplication.",
+            "Added Windows Share as a first-class drop destination."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed clipboard captures of the same payload stacking as unique rows.",
+            "Fixed drag-and-drop catalogs so media files and ordinary files do not share one ineligible action list.",
+            "Fixed calendar agenda geometry after the task row landed."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Split the surface host into Calendar, Dock, and Media Chrome partials.",
+            "Updated design tokens for queue rows, device rows, and dock hit targets.",
+            "Kept Share, Convert, and device switching on native OS APIs."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.6.7",
+      "date": "2026-08-14",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Spotify Connect",
+      "summary": "Play this can leave the desktop app and talk to Spotify’s player API.",
+      "git": "7f1d347",
+      "screenshots": [
+        {
+          "path": "screenshots/implementation-media-expanded.png",
+          "alt": "Halo 0.6.7: expanded media with optional Spotify Connect."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added Spotify Connect with PKCE OAuth. Tokens live in the Windows credential vault, never in settings.json.",
+            "Added Settings → Media connection UI with a clear Premium requirement. Halo does not stream audio.",
+            "Added a structured play-track result so the mascot can say whether the track started, needs Premium, or fell back.",
+            "Extended the keyword parser for title by artist so Connect and desktop search share one query shape.",
+            "Bumped settings schema to 14 for the Spotify client ID."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed play requests that used to fail closed with no spoken reason.",
+            "Fixed fallback to the desktop-shortcut path when Connect is not configured."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Kept cloud answers off the shipped path. Connect is optional music control, not a Halo account.",
+            "Documented that voice play through Connect is a Premium Spotify feature."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.6.6",
+      "date": "2026-08-14",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Smarter play title by artist",
+      "summary": "Track resolution stops guessing the first search hit.",
+      "git": "f48f2be",
+      "screenshots": [],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added title-by-artist parsing for spoken and typed play commands.",
+            "Added MusicBrainz-assisted matching on top of Spotify search."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed media session calls that could throw on a disappearing GSMTC session and take the surface down.",
+            "Fixed assistant command flow so a new request clears stale chat history."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Lengthened the search HTTP timeout so a slow provider is a delay, not a false miss.",
+            "Tightened search-result scoring before the desktop UI-Automation fallback runs."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.6.5",
+      "date": "2026-08-14",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Spotify on the desktop, Settings rebuilt",
+      "summary": "If Connect is off, Halo can still drive the Spotify desktop app. Settings finally looks like a product.",
+      "git": "95e11d6",
+      "screenshots": [],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added Spotify desktop control: quick search plus UI Automation to confirm and play a result in the installed app.",
+            "Added junk-transcript filtering and silence detection for Whisper."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed local model-store assertions after the download UI landed.",
+            "Fixed media-query mocks so shuffle, repeat, and replay coverage matches the desktop path."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Rebuilt Settings with a flush-left sidebar, in-window search, updated theme brushes, and a layout that resizes instead of clipping.",
+            "Shortened assistant launch-hold and follow-up conversation rules.",
+            "Kept Settings chrome fully opaque — no Mica, no Acrylic."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.6.4",
+      "date": "2026-08-14",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Search and play across your music apps",
+      "summary": "Play, replay, shuffle, repeat, and what’s on my PC become assistant intents.",
+      "git": "7921489",
+      "screenshots": [
+        {
+          "path": "screenshots/implementation-media-expanded.png",
+          "alt": "Halo 0.6.4: expanded media transport with search-driven playback."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added assistant intents for play track, replay, repeat, shuffle, date, time, list apps, and status.",
+            "Added cross-provider music search for Spotify, Apple Music, YouTube Music, and a web fallback.",
+            "Added a Whisper model catalog from Tiny through Large v3 / Distil, downloadable and deletable locally.",
+            "Added persistent chat history for a follow-up turn after a command.",
+            "Added PC-environment formatting for spoken answers about battery, volume, time, and now-playing.",
+            "Extended the media session service with shuffle, repeat, replay, and direct track playback.",
+            "Bumped settings schema to 13 for the selected speech model."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed typewriter text on the AI station clipping mid-glyph.",
+            "Fixed media source-hint matching so on Spotify and in Music resolve to the right session."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Put live transcripts and model choice on the AI hub instead of a debug window.",
+            "Kept every speech model on-device. Nothing is uploaded for recognition."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.6.3",
+      "date": "2026-08-14",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Close it, minimize it, watch the mascot react",
+      "summary": "Voice can close or minimize the app you named, and the face has opinions.",
+      "git": "d1b62d1",
+      "screenshots": [],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added close app and minimize app intents.",
+            "Added avatar reactions that change with intent, conversation state, and whether the command succeeded.",
+            "Added delete-and-size labels on local speech and language-model files."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Overhauled app resolution with soundex, fuzzy matching, and abbreviation handling.",
+            "Fixed assistant message layout: wrapping, avatar sizing, and Settings AI copy."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Made failure a facial expression, not only a sentence.",
+            "Kept destructive model deletes in Settings, behind an explicit remove."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.6.2",
+      "date": "2026-08-14",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Whisper, brightness HUD, the AI station",
+      "summary": "Speech moves on-device, brightness gets a pulse, and AI becomes a station next to Home.",
+      "git": "38879dc",
+      "screenshots": [
+        {
+          "path": "screenshots/feature-control-center.png",
+          "alt": "Halo 0.6.2: Control Center with brightness alongside volume and radios."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added the AI station on expanded chrome: face, status, Listen, suggestion chips, last reply.",
+            "Added on-device speech via Whisper alongside the Windows Speech API path.",
+            "Added a brightness HUD that pulses when the display level changes.",
+            "Added a local model store with progress-tracked downloads.",
+            "Added system intents for volume, brightness, and Wi-Fi / Bluetooth / Airplane radios.",
+            "Added WhatsApp to the voice app-launch aliases.",
+            "Localized every new AI string across the ten Halo languages."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed Settings page naming so AI is a real nav item.",
+            "Fixed geometry around the AI station so the mascot and transcript share Home-sized chrome without clipping."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Kept Assistant off until Settings → AI is enabled. Halo is not always listening.",
+            "Documented the optional xAI key field as a non-shipped cloud path. Free-form answers use the on-device model."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.6.1",
+      "date": "2026-08-14",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Open apps by voice, answers on this PC",
+      "summary": "Open Edge works. Free-form questions can stay on the machine.",
+      "git": "3ee9799",
+      "screenshots": [],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added a fuzzy app-launch resolver with common aliases, wired into favorite apps.",
+            "Added on-device language-model support with a progress-tracked download.",
+            "Added a microphone peak meter so the idle notch visualizes listening.",
+            "Added an assistant launch presentation when a voice command starts an app.",
+            "Taught the parser to extract media-source targets and app-launch commands.",
+            "Extended media sessions so Halo can aim transport at a named app.",
+            "Added boot-greeting avatar clips."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed blink timing so greetings and listen clips do not fight the idle blink.",
+            "Fixed idle geometry after the accessory rail landed so the peek still sits on the left."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Actions still run without a language model: timers, transport, volume, brightness, radios, calendar, clipboard, open, close, minimize.",
+            "The model is for questions Halo cannot turn into an action, and you can delete it."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.6.0",
+      "date": "2026-08-14",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Talk to Halo",
+      "summary": "Click the face, or press Win + Alt + A. The notch listens, then does something.",
+      "git": "fca4286",
+      "screenshots": [],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added an opt-in in-app assistant, off by default, on Settings → AI.",
+            "Added Win + Alt + A, rebindable, to start a listen session.",
+            "Added Windows Speech Recognition with command phrases for timers, media, and clipboard.",
+            "Added secure API-key storage through the Windows Password Vault.",
+            "Added assistant glance notifications on the compact notch.",
+            "Added a debug window for assistant and speech logs.",
+            "Added microphone and internet capabilities to the packaged manifest, requested only when Assistant is used.",
+            "Bumped settings schema to 12."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed logging so assistant traces can appear in the debug window without spamming the tray."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Sessions start from face click, hotkey, later the AI station, or a typed Ask Halo. There is no wake-word running in the background.",
+            "Private data stays local. Clipboard context for what did I copy is a separate opt-in."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.5.0",
+      "date": "2026-08-14",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "A face in the notch",
+      "summary": "Halo stops being an empty pill. A mascot peeks from the left of idle chrome.",
+      "git": "d803d87",
+      "screenshots": [],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added a resident mascot peek on the idle notch — authored 3D-to-2D faces.",
+            "Added ten official variants: Halo, Citrus, Cubee, Cloudee, Freddy, Grok bot, Kirby, Nova, Onee, and Sunee.",
+            "Added Settings → Halo for variant choice, body and eye recolor, and reset to the variant palette.",
+            "Added idle, hover-curious, and poke hit-testing: empty bar opens Home; the face is its own target.",
+            "Added blink, ambient idle, and expression playback with reduce-motion respect.",
+            "Embedded variant packages so a face works offline on first launch."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed idle geometry so the peek occupies a dedicated left rail instead of colliding with compact media.",
+            "Fixed hover so holding the face does not expand Home out from under a poke."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Kept the silhouette black. The face lives in the notch, it is not a second window.",
+            "Preview clips in Settings use the same projector the live peek uses."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.4.0",
+      "date": "2026-08-14",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Clips — text, images, files, and color",
+      "summary": "Clipboard history grows up. Clips is no longer a text dump.",
+      "git": "ceed2ba",
+      "screenshots": [
+        {
+          "path": "screenshots/implementation-clipboard.png",
+          "alt": "Halo 0.4.0: Clips with preview cards for text, images, files, and color."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added multi-type clipboard capture: text, images, files, and color swatches.",
+            "Added a Clips UI with category filters, preview cards, and relative-age labels.",
+            "Reworked native clipboard interop so paste restores the original type.",
+            "Added design tokens and item-kind enums for later library and OCR work."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed history items that used to collapse images and files into text-like rows.",
+            "Updated marketing screenshots so Clips on the site matches the new cards."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Kept Clips opt-in and local. Nothing leaves the PC.",
+            "Foreground paste still excludes Halo’s own window, so copying from Clips does not echo."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.3.0",
+      "date": "2026-08-12",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Write without leaving the notch",
+      "summary": "Notes get an in-notch editor. Calendar gets a real month. Craft gets sharper.",
+      "git": "070de9f",
+      "screenshots": [
+        {
+          "path": "screenshots/feature-notes-editor.png",
+          "alt": "Halo 0.3.0: in-notch Notes editor with title, body, and checklist."
+        },
+        {
+          "path": "screenshots/feature-notes-list.png",
+          "alt": "Halo 0.3.0: Notes list on the notch."
+        },
+        {
+          "path": "screenshots/feature-calendar.png",
+          "alt": "Halo 0.3.0: four-row calendar month and day agenda."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added an in-notch Notes editor: title, body, checklist, autosave; back returns to the list.",
+            "Rebuilt the calendar month as a 4-row, 28-day grid.",
+            "Added foreground-aware clipboard paste that never pastes into Halo itself.",
+            "Added Hub actions for calendar navigation and editor interactions.",
+            "Added the first marketing screenshot set, captured from the live notch on white."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed Settings loading copy that still talked like a stub.",
+            "Fixed clipboard test mocks after the foreground-paste path landed."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Improved GDI+ decoding with high-quality scaling and correct alpha compositing.",
+            "Raised app-icon extraction to 512×512 so notch badges stay crisp on high-DPI displays.",
+            "Converted drop-action image exports through System.Drawing for direct PNG output.",
+            "Tightened Bluetooth, media, and status tokens after the first visual QA pass."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.2.0",
+      "date": "2026-08-12",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "Home, Control Center, and the rest of the desk",
+      "summary": "The notch learns radios, calendar, notes, brightness, drop actions, and ten languages.",
+      "git": "15cb317",
+      "screenshots": [
+        {
+          "path": "screenshots/feature-home-dashboard.png",
+          "alt": "Halo 0.2.0: Home dashboard."
+        },
+        {
+          "path": "screenshots/feature-control-center.png",
+          "alt": "Halo 0.2.0: Control Center."
+        },
+        {
+          "path": "screenshots/feature-bluetooth.png",
+          "alt": "Halo 0.2.0: Bluetooth devices with battery percent."
+        },
+        {
+          "path": "screenshots/feature-calendar.png",
+          "alt": "Halo 0.2.0: Windows Calendar week and agenda."
+        },
+        {
+          "path": "screenshots/feature-event-reminder.png",
+          "alt": "Halo 0.2.0: event reminder with Join."
+        },
+        {
+          "path": "screenshots/feature-drop-actions.png",
+          "alt": "Halo 0.2.0: drop actions on files dragged onto the notch."
+        },
+        {
+          "path": "screenshots/feature-notes-list.png",
+          "alt": "Halo 0.2.0: local Notes list."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Renamed the Nook hub to Home — live media, favorite apps, modules, time, and battery in one dashboard.",
+            "Added Control Center from time and battery: Wi-Fi, Bluetooth radio, Airplane, volume, and brightness.",
+            "Added Bluetooth device rows with battery percent when the device reports it.",
+            "Added Windows Calendar: week strip, day agenda, and event reminders with Focus, Snooze, Dismiss, and Join.",
+            "Added local Notes stored under %LocalAppData%\\Halo\\notes.",
+            "Added Drop Actions: Shelf, Share, Open with, Zip, Unzip, Convert, Move to, Copy to, plus OneDrive and Play in Music.",
+            "Added display brightness as its own integration.",
+            "Added localization for English, Chinese (Simplified), French, German, Greek, Indonesian, Japanese, Spanish, Korean, and Turkish, or Match Windows.",
+            "Added a dedicated Notes window for longer writing."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Fixed clipped station labels and tight geometry after Home replaced Nook.",
+            "Fixed packaging manifests and project references so Bluetooth, Calendar, Notes, and Localization build as first-class assemblies.",
+            "Updated tests for the new modules and for copy that still said Nook."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Kept every new capability on native Windows APIs: WinRT radios, Windows appointment store, local files.",
+            "Updated onboarding to teach Home, not a code-name hub.",
+            "Added reference visual captures so later pixel QA had a baseline."
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-08-12",
+      "published": true,
+      "channel": "pre-release",
+      "headline": "First light — a Dynamic Island for Windows",
+      "summary": "A native, quiet, focus-safe notch. Media, files, timers, calls, settings, and the silhouette itself.",
+      "git": "573beb3",
+      "screenshots": [
+        {
+          "path": "screenshots/implementation-media-expanded.png",
+          "alt": "Halo 0.1.0: expanded Windows media player on the notch."
+        },
+        {
+          "path": "screenshots/implementation-tray-populated.png",
+          "alt": "Halo 0.1.0: Files Tray holding dragged Explorer items."
+        },
+        {
+          "path": "screenshots/implementation-apps.png",
+          "alt": "Halo 0.1.0: favorite apps with real icons."
+        },
+        {
+          "path": "screenshots/implementation-timer.png",
+          "alt": "Halo 0.1.0: timer running on the notch."
+        },
+        {
+          "path": "screenshots/implementation-call.png",
+          "alt": "Halo 0.1.0: incoming call chrome."
+        },
+        {
+          "path": "screenshots/implementation-call-connected.png",
+          "alt": "Halo 0.1.0: connected call chrome."
+        }
+      ],
+      "sections": [
+        {
+          "title": "New Features",
+          "items": [
+            "Added a topmost, no-activate tool window that does not steal focus and does not appear in Alt+Tab or the taskbar.",
+            "Added an attached, optically pure-black notch with inverted scoop shoulders at the top center of a chosen display.",
+            "Added Idle, Compact, and Expanded chrome with interruptible spring morphs and optional expand-on-hover.",
+            "Added path-based hit-testing so clicks outside the silhouette pass through to the desktop.",
+            "Added per-pixel alpha and supersampled silhouette fidelity at every DPI.",
+            "Added multi-monitor placement, mixed-DPI geometry, and hot-plug recovery.",
+            "Added session lock hide and unlock restore.",
+            "Added fullscreen policy: hide, always show, Presentation Mode, and per-process overrides.",
+            "Added Windows media via GSMTC: compact now-playing, expanded player, transport, and seek.",
+            "Added a Core Audio volume HUD and mute pulse.",
+            "Added battery, charging, low, and critical activities.",
+            "Added timers with presets, custom minutes, pause, resume, cancel, and a complete state.",
+            "Added a Caps Lock compact indicator and a default-audio-device activity.",
+            "Added packaged notification listening with Settings-first permission onboarding.",
+            "Added incoming and connected call chrome with accept and decline.",
+            "Added Files Tray: drag from Explorer, hold, open, remove, clear, drag back out.",
+            "Added opt-in local clipboard history for text.",
+            "Added favorite apps with real package logos and shell icons.",
+            "Added Quick Controls, global hotkeys, and full rebinding.",
+            "Added a native WinUI 3 Settings app, live display calibration, autostart, tray icon, and first-run onboarding.",
+            "Added light, dark, and Match Windows themes, accent colors, and Reduce Motion.",
+            "Added an idle performance gate: cold-idle CPU median under 0.5% and working set at or under 150 MiB."
+          ]
+        },
+        {
+          "title": "Bug Fixes",
+          "items": [
+            "Stabilized Tray so opening Files Tray no longer paints media into the shelf geometry.",
+            "Stabilized empty-Tray keep-open so a shelf with no files still holds its size.",
+            "Stabilized compact media padding and station-row hit testing so a Tray miss does not shove the notch sideways.",
+            "Fixed working-set regressions by deferring the Settings window until it is asked for."
+          ]
+        },
+        {
+          "title": "Refinements",
+          "items": [
+            "Established design tokens for geometry, spacing, motion, and content craft.",
+            "Established product principles later versions are not allowed to violate: quiet until relevant, no focus steal, local-first privacy, native Windows identity, pure-black outer canvas.",
+            "Established the test spine for surface, orchestrator, geometry, media, audio, power, shelf, settings, hotkeys, and notifications."
+          ]
+        }
+      ]
+    }
+  ]
+}

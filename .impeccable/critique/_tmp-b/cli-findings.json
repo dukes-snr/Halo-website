@@ -1,0 +1,31 @@
+{
+  "ran": true,
+  "exitCode": 0,
+  "total": 0,
+  "uniqueRuleNames": [],
+  "byRule": [],
+  "samples": [],
+  "filesScanned": [
+    "app/page.tsx",
+    "app/layout.tsx",
+    "components/marketing/Hero.tsx",
+    "components/marketing/StationsSection.tsx",
+    "components/marketing/StationBoard.tsx",
+    "components/marketing/PrinciplesBand.tsx",
+    "components/marketing/ChangelogTeaser.tsx",
+    "components/marketing/Faq.tsx",
+    "components/marketing/CtaSection.tsx",
+    "components/marketing/NotchDemo.tsx",
+    "components/marketing/DroppyMock.tsx",
+    "components/marketing/VideoLightbox.tsx",
+    "components/layout/SiteHeader.tsx",
+    "components/layout/SiteFooter.tsx",
+    "components/brand/Mascot.tsx",
+    "components/brand/Logo.tsx",
+    "components/ui/Button.tsx",
+    "components/ui/Reveal.tsx",
+    "components/marketing/droppy/droppy-mock.html"
+  ],
+  "raw": [],
+  "note": "detect.mjs --json printed [] and exited 0. CSS-only files were not passed (globals.css, dmk.css)."
+}

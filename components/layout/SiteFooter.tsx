@@ -1,35 +1,87 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { useState } from "react";
+import { nav, site } from "@/lib/content";
+import { Logo } from "@/components/brand/Logo";
+import { Mascot } from "@/components/brand/Mascot";
+
+function FooterMascot() {
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  return (
+    <div
+      className="flex shrink-0 items-center justify-center"
+      onMouseMove={(event) => {
+        const box = event.currentTarget.getBoundingClientRect();
+        const px = (event.clientX - box.left) / box.width - 0.5;
+        const py = (event.clientY - box.top) / box.height - 0.5;
+        setTilt({ x: py * -10, y: px * 12 });
+      }}
+      onMouseLeave={() => setTilt({ x: 0, y: 0 })}
+    >
+      <div
+        className="transition-transform duration-150 ease-out will-change-transform"
+        style={{
+          transform: `perspective(560px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+        }}
+      >
+        <Mascot
+          size={108}
+          animation="idle"
+          hoverAnimation="curious"
+          pokeAnimation="playful"
+          ariaLabel="Halo mascot"
+        />
+      </div>
+    </div>
+  );
+}
 
 export function SiteFooter() {
   return (
-    <footer className="mx-auto w-full max-w-[1200px] px-6 py-12">
-      <div className="flex flex-col gap-10 md:flex-row md:items-start md:justify-between">
-        <Button href="/download">Download Halo</Button>
-        <div className="flex gap-10">
-          <ArrowUpRight className="mt-1 h-5 w-5 shrink-0 text-ink" aria-hidden />
-          <div className="grid grid-cols-2 gap-x-16 gap-y-3">
-            <Link href="/#stations" className="text-base text-ink hover:opacity-70">
-              Features
+    <footer className="border-t border-line bg-paper">
+      <div className="mx-auto w-full max-w-[1120px] px-5 py-16 md:px-8 md:py-20">
+        <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between md:gap-16">
+          <div className="flex max-w-[380px] items-start gap-5">
+            <FooterMascot />
+            <div className="pt-2">
+              <Link href="/" className="inline-flex">
+                <Logo />
+              </Link>
+              <p className="mt-3 text-[14px] leading-relaxed text-ink/55">
+                {site.tagline}. Native Windows, local-first, assistant off by
+                default.
+              </p>
+            </div>
+          </div>
+
+          <nav
+            aria-label="Footer"
+            className="grid grid-cols-2 gap-x-10 gap-y-2.5 sm:grid-cols-3 md:max-w-[520px]"
+          >
+            {nav.features.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-[14px] text-ink/50 transition-colors hover:text-ink"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link href="/features" className="text-[14px] text-ink/50 transition-colors hover:text-ink">
+              All features
             </Link>
-            <Link href="/media" className="text-base text-ink hover:opacity-70">
-              Media
-            </Link>
-            <Link href="/changelog" className="text-base text-ink hover:opacity-70">
+            <Link href="/changelog" className="text-[14px] text-ink/50 transition-colors hover:text-ink">
               Updates
             </Link>
-            <Link href="/files" className="text-base text-ink hover:opacity-70">
-              Files
+            <Link href="/download" className="text-[14px] text-ink/50 transition-colors hover:text-ink">
+              Download
             </Link>
-            <Link href="/privacy" className="text-base text-ink hover:opacity-70">
-              Privacy
-            </Link>
-            <Link href="/notes" className="text-base text-ink hover:opacity-70">
-              Notes
-            </Link>
-          </div>
+          </nav>
         </div>
+
+        <p className="mt-14 text-[13px] text-ink/40">© 2026 Halo</p>
       </div>
     </footer>
   );
