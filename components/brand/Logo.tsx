@@ -8,10 +8,17 @@ import Image from "next/image";
 export function LogoMark({
   size = 32,
   className = "",
+  sizeClassName,
   priority = false,
 }: {
   size?: number;
   className?: string;
+  /**
+   * Size the mark from CSS instead of a fixed pixel box — for places where it
+   * has to scale with surrounding type. `size` still feeds the intrinsic
+   * width/height that `next/image` needs to reserve space.
+   */
+  sizeClassName?: string;
   priority?: boolean;
 }) {
   return (
@@ -24,8 +31,10 @@ export function LogoMark({
       priority={priority}
       // Retina: the source is 512px square, so small renders have headroom.
       quality={100}
-      className={className}
-      style={{ width: size, height: size }}
+      className={`${sizeClassName ?? ""} ${className}`.trim()}
+      // Inline styles beat classes, so only pin the box when the caller has
+      // not asked to size it from CSS.
+      style={sizeClassName ? undefined : { width: size, height: size }}
     />
   );
 }
