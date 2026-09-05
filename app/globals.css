@@ -24,6 +24,16 @@
 
   --radius-card: 20px;
   --radius-image: 16px;
+
+  /* Landing theme — adapted from the Midlife Engineering reference.
+     Mist ground, near-black ink, one orange flare. */
+  --mist: #ebebeb;
+  --mist-deep: #e2e2e2;
+  --slate: #262626;
+  --slate-soft: #7d7d7d;
+  --slate-faint: #a8a8a8;
+  --flare: #ffa600;
+  --shell: #0a0a0a;
 }
 
 @theme inline {
@@ -41,9 +51,19 @@
   --color-background: var(--paper);
   --color-foreground: var(--ink);
 
+  --color-mist: var(--mist);
+  --color-mist-deep: var(--mist-deep);
+  --color-slate: var(--slate);
+  --color-slate-soft: var(--slate-soft);
+  --color-slate-faint: var(--slate-faint);
+  --color-flare: var(--flare);
+  --color-shell: var(--shell);
+
   --font-sans: var(--font-satoshi), "Segoe UI", sans-serif;
   --font-display: var(--font-source-serif), "Iowan Old Style", "Palatino Linotype", serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-grotesk: var(--font-switzer), "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-readout: var(--font-fragment-mono), ui-monospace, monospace;
 
   --radius-card: var(--radius-card);
   --radius-image: var(--radius-image);
@@ -194,4 +214,229 @@ a {
 
 .scrollbar-none::-webkit-scrollbar {
   display: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Landing theme
+   The landing route swaps the editorial white catalog for the mist ground,
+   grotesk mega type, and orange flare adapted from the reference site.
+   Scoped to `.landing` so every other route keeps the paper design system.
+--------------------------------------------------------------------------- */
+
+html:has(.landing) {
+  background: var(--mist);
+  scrollbar-color: var(--slate) var(--mist);
+  /* The scroll engine owns easing; native smooth scrolling fights it. */
+  scroll-behavior: auto;
+}
+
+html:has(.landing) ::-webkit-scrollbar-thumb {
+  background: var(--slate);
+  border: 3px solid var(--mist);
+}
+
+html:has(.landing) ::-webkit-scrollbar-track {
+  background: var(--mist);
+}
+
+.landing {
+  background: var(--mist);
+  color: var(--slate);
+  font-family: var(--font-switzer), "Segoe UI", Helvetica, Arial, sans-serif;
+  font-feature-settings: "ss01";
+  letter-spacing: -0.011em;
+}
+
+.landing ::selection {
+  background: var(--flare);
+  color: var(--mist);
+}
+
+.landing :focus-visible {
+  outline: 2px solid var(--flare);
+  outline-offset: 4px;
+}
+
+/* Mega wordmark — sized to bleed the viewport like the reference lockup. */
+.landing-mega {
+  font-family: var(--font-switzer), "Segoe UI", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  font-size: clamp(3.25rem, 17.4vw, 17rem);
+  line-height: 0.84;
+  letter-spacing: -0.035em;
+  color: var(--slate);
+}
+
+.landing-readout {
+  font-family: var(--font-fragment-mono), ui-monospace, monospace;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Scroll reveal: glyphs sit faint until the scrub walks their opacity up.
+   Colour is final from the start, so a black glyph at low alpha reads as
+   the reference's grey and an orange one reads as its washed orange.
+   0.1 is the reference's own resting value, measured. */
+.reveal-char {
+  opacity: 0.1;
+  will-change: opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-char {
+    opacity: 1;
+  }
+}
+
+/* The pinned screen reads as a physical object on the mist ground: a deep,
+   soft cast shadow and a hairline edge, no bezel. */
+.shell-shadow {
+  box-shadow:
+    0 0 0 1px rgb(17 17 17 / 0.1),
+    0 40px 80px -32px rgb(17 17 17 / 0.42),
+    0 120px 130px -80px rgb(17 17 17 / 0.32);
+}
+
+@keyframes marquee-cards {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee-cards {
+  animation: marquee-cards 46s linear infinite;
+  will-change: transform;
+}
+
+.marquee-cards-track:hover .animate-marquee-cards {
+  animation-play-state: paused;
+}
+
+@keyframes readout-caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.readout-caret {
+  animation: readout-caret 1.05s steps(1, end) infinite;
+}
+
+/* Boot: a dark panel composition clears the frame.
+   Full-bleed columns hold the viewport while the wordmark lands, then leave in
+   alternating directions on a left-to-right stagger. Dark sheet to mist page,
+   so the reveal itself is the contrast. */
+/* Squares land one by one onto the dark field until the viewport is paved,
+   then the whole sheet clears. `both` keeps each square hidden until its
+   own delay comes round. */
+@keyframes boot-square {
+  from {
+    opacity: 0;
+    transform: scale(0.84);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.boot-square {
+  animation-name: boot-square;
+  animation-duration: 0.24s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+@keyframes boot-clear {
+  to {
+    opacity: 0;
+  }
+}
+
+.boot-clear {
+  animation: boot-clear 0.32s ease-out forwards;
+}
+
+/* Route enter.
+   Deliberately no `animation-fill-mode`: outside the animation's active period
+   the element falls back to its normal, fully visible styles. If animations
+   never run — throttled tab, unpainted window, a driver that stalls — the
+   worst case is no transition rather than a page stuck at `opacity: 0`. */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
+}
+
+@keyframes boot-label {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  20%,
+  52% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+.boot-label {
+  animation: boot-label 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes boot-rule {
+  0% {
+    transform: scaleX(0);
+  }
+  55%,
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+.boot-rule {
+  transform-origin: left;
+  animation: boot-rule 0.95s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-cards,
+  .readout-caret,
+  .boot-square,
+  .boot-clear,
+  .boot-label,
+  .boot-rule {
+    animation: none;
+  }
 }

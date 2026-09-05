@@ -1,50 +1,48 @@
+import Image from "next/image";
+
+/**
+ * The Halo mark: the product's own icon, cut out of its render onto
+ * transparency. It carries its own rounded-square silhouette, so it is never
+ * clipped or plated — it sits directly on whatever ground it lands on.
+ */
 export function LogoMark({
   size = 32,
   className = "",
+  priority = false,
 }: {
   size?: number;
   className?: string;
+  priority?: boolean;
 }) {
   return (
-    <svg
+    <Image
+      src="/assets/brand/halo-mark.png"
+      alt=""
+      aria-hidden
       width={size}
       height={size}
-      viewBox="0 0 96 96"
-      fill="none"
-      aria-hidden
+      priority={priority}
+      // Retina: the source is 512px square, so small renders have headroom.
+      quality={100}
       className={className}
-    >
-      <rect width="96" height="96" rx="24" fill="var(--ink, #111111)" />
-      <clipPath id="halo-mark-clip">
-        <rect width="96" height="96" rx="24" />
-      </clipPath>
-      <g clipPath="url(#halo-mark-clip)">
-        <g fill="#FFFFFF">
-          <circle cx="38" cy="44" r="19" />
-          <circle cx="57" cy="37" r="22" />
-          <circle cx="71" cy="49" r="17" />
-          <rect x="21" y="43" width="58" height="28" rx="14" />
-          <circle cx="88" cy="90" r="14" />
-        </g>
-        <ellipse cx="45" cy="54" rx="4.2" ry="9" fill="var(--ink, #111111)" />
-        <path
-          d="M55 56 L67 53"
-          stroke="var(--ink, #111111)"
-          strokeWidth="5.5"
-          strokeLinecap="round"
-        />
-      </g>
-    </svg>
+      style={{ width: size, height: size }}
+    />
   );
 }
 
-export function Logo({ className = "" }: { className?: string }) {
+export function Logo({
+  className = "",
+  size = 30,
+  priority = false,
+}: {
+  className?: string;
+  size?: number;
+  priority?: boolean;
+}) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <LogoMark size={28} className="rounded-[8px]" />
-      <span className="font-display text-[18px] font-semibold tracking-[-0.02em] text-ink">
-        Halo
-      </span>
+      <LogoMark size={size} priority={priority} />
+      <span className="text-[17px] font-medium tracking-[-0.02em]">Halo</span>
     </span>
   );
 }

@@ -44,3 +44,6 @@ next-env.d.ts
 /.playwright-cli/
 /output/
 /tmp/
+
+# Claude Code local tooling (holds git worktrees in the main checkout)
+/.claude/

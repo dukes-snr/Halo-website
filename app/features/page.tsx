@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { featurePages } from "@/lib/content";
-import { Reveal } from "@/components/ui/Reveal";
+import { RevealText } from "@/components/landing/RevealText";
 
 export const metadata: Metadata = {
   title: "Features",
@@ -11,36 +11,48 @@ export const metadata: Metadata = {
 
 export default function FeaturesPage() {
   return (
-    <div className="bg-paper">
-      <section className="mx-auto max-w-[860px] px-5 pb-12 pt-16 text-center md:px-8 md:pb-16 md:pt-24">
-        <h1 className="mx-auto max-w-[16ch] font-display text-[clamp(40px,6vw,72px)] font-semibold leading-[1.06] tracking-[-0.025em] text-ink">
-          Everything the notch{" "}
-          <em className="italic font-medium">can do.</em>
-        </h1>
-        <p className="mx-auto mt-5 max-w-[54ch] text-[16px] leading-[1.6] text-ink/55 md:text-[17px]">
+    <div>
+      <section className="mx-auto max-w-[1360px] px-5 pb-16 pt-20 md:px-8 md:pb-20 md:pt-28">
+        <p className="landing-readout text-[11px] text-slate-soft">
+          Twelve stations
+        </p>
+
+        <RevealText
+          as="h1"
+          runs={[
+            { text: "Everything the notch " },
+            { text: "can do.", accent: true },
+          ]}
+          className="mt-6 max-w-[14ch] text-[clamp(2.25rem,7vw,5rem)] font-medium leading-[0.94] tracking-[-0.038em]"
+        />
+
+        <p className="mt-7 max-w-[54ch] text-[16px] leading-[1.6] text-slate md:text-[17px]">
           Twelve native Windows stations in one quiet presence at the top of
           your display.
         </p>
       </section>
 
-      <section className="mx-auto max-w-[1120px] px-5 pb-24 md:px-8 md:pb-32">
-        <Reveal stagger className="grid border-t border-line sm:grid-cols-2 lg:grid-cols-3">
+      <section className="mx-auto max-w-[1360px] px-5 pb-28 md:px-8 md:pb-36">
+        <ul className="grid border-t border-slate/12 sm:grid-cols-2 lg:grid-cols-3">
           {featurePages.map((page) => (
-            <Link
-              key={page.slug}
-              href={`/${page.slug}`}
-              className="group flex flex-col border-b border-line p-6 sm:border-r sm:odd:[&:nth-last-child(1)]:border-r-0 lg:border-r lg:[&:nth-child(3n)]:border-r-0"
-            >
-              <h2 className="font-display text-[22px] font-semibold tracking-[-0.02em] text-ink">
-                {page.title}
-              </h2>
-              <p className="mt-2 text-[14px] leading-[1.55] text-ink/55">{page.headline}</p>
-              <span className="mt-5 text-[13px] font-medium text-ink/45 transition-colors group-hover:text-ink">
-                Explore
-              </span>
-            </Link>
+            <li key={page.slug}>
+              <Link
+                href={`/${page.slug}`}
+                className="group flex h-full flex-col border-b border-slate/12 px-6 py-8 transition-colors hover:bg-mist-deep/60 sm:border-r sm:[&:nth-child(2n)]:border-r-0 lg:border-r lg:[&:nth-child(3n)]:border-r-0"
+              >
+                <h2 className="text-[20px] font-medium tracking-[-0.02em] transition-colors group-hover:text-flare">
+                  {page.title}
+                </h2>
+                <p className="mt-2 text-[14px] leading-[1.55] text-slate-soft">
+                  {page.headline}
+                </p>
+                <span className="landing-readout mt-6 text-[10px] text-slate-faint transition-colors group-hover:text-flare">
+                  Explore →
+                </span>
+              </Link>
+            </li>
           ))}
-        </Reveal>
+        </ul>
       </section>
     </div>
   );

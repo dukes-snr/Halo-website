@@ -2,34 +2,43 @@ import type { Metadata } from "next";
 import feed from "@/lib/data/changelog.json";
 import { releaseCards, type ChangelogFeed } from "@/lib/changelog";
 import { ChangelogReleaseCard } from "@/components/marketing/ChangelogReleaseCard";
+import { RevealText } from "@/components/landing/RevealText";
 
 export const metadata: Metadata = {
   title: "Changelog",
-  description: "Halo pre-1.0 release notes. Every gated push since 12 August 2026, newest first.",
+  description:
+    "Halo pre-1.0 release notes. Every gated push since 12 August 2026, newest first.",
 };
 
 export default function ChangelogPage() {
   const cards = releaseCards(feed as ChangelogFeed);
 
   return (
-    <section className="mx-auto max-w-[1020px] px-5 pb-24 pt-16 sm:px-6 md:pb-32 md:pt-24">
-      <h1 className="text-center font-display text-[44px] font-semibold leading-none tracking-[-0.025em] text-ink sm:text-[54px] md:text-[64px]">
-        Changelog
-      </h1>
-      <p className="mx-auto mt-4 max-w-[52ch] text-center text-[16px] leading-[1.6] text-ink/60">
-        Halo has not launched. These 0.x notes are every published gated push since August 2026, newest first. Unpublished work stays off this page.
-      </p>
+    <div>
+      <section className="mx-auto max-w-[1360px] px-5 pb-16 pt-20 md:px-8 md:pb-20 md:pt-28">
+        <p className="landing-readout text-[11px] text-slate-soft">
+          Pre-1.0 · newest first
+        </p>
 
-      <div className="relative mt-14 md:mt-20">
-        <div aria-hidden className="absolute bottom-8 left-[7px] top-4 hidden w-[3px] rounded-full bg-ink/10 md:block" />
+        <RevealText
+          as="h1"
+          text="Changelog"
+          className="mt-6 text-[clamp(2.25rem,7vw,5rem)] font-medium leading-[0.94] tracking-[-0.038em]"
+        />
+
+        <p className="mt-7 max-w-[58ch] text-[16px] leading-[1.6] text-slate md:text-[17px]">
+          Halo has not launched. These 0.x notes are every published gated push
+          since August 2026, newest first. Unpublished work stays off this page.
+        </p>
+      </section>
+
+      <section className="mx-auto max-w-[1360px] px-5 pb-28 md:px-8 md:pb-36">
         <div id="changelog-root" className="flex flex-col gap-14 md:gap-20">
-          {cards.map((card, index) => (
-            <div key={card.version}>
-              <ChangelogReleaseCard card={card} />
-            </div>
+          {cards.map((card) => (
+            <ChangelogReleaseCard key={card.version} card={card} />
           ))}
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

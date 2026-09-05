@@ -1,30 +1,28 @@
 <!-- impeccable:design-schema 1 -->
 ---
 name: Halo Marketing Site
-description: Editorial product catalog for Halo — plain white paper, ink type, Source Serif 4 display with italic close, black pill CTAs, and Dia-style pastel stages only behind product footage.
+description: Mist ground, Switzer grotesk, one orange flare, and a real Windows desktop pinned to the viewport. Scroll-driven typing reveal on display type. Adapted from the Midlife Engineering reference.
 colors:
-  ink: "#111111"
-  ink-2: "#3D3D3D"
-  ink-muted: "#6A6A6A"
-  paper: "#FFFFFF"
-  foam: "#F7F7F5"
-  haze: "#F3F3F0"
-  line: "#E8E8E4"
-  cloud: "#FFFFFF"
-  sun: "#FFD400"
+  mist: "#EBEBEB"
+  mist-deep: "#E2E2E2"
+  slate: "#262626"
+  slate-soft: "#7D7D7D"
+  slate-faint: "#A8A8A8"
+  flare: "#FF611A"
+  shell: "#0A0A0A"
 typography:
-  display: Source Serif 4 400-700 roman + italic
-  body: Satoshi 400/500
-  label: Geist Mono
+  display: Switzer 500 (self-hosted; PP Neue Montreal stand-in)
+  body: Switzer 400
+  label: Fragment Mono 400
 rounded:
-  card: 20-24px
-  stage: 28-36px
+  screen: 14-20px
   control: 9999px
 components:
-  button-primary: ink fill, paper text, full pill, hover ink/90
-  button-secondary: paper fill, hairline ring ink/15, hover ring ink/40
-  nav: sticky paper, quiet 14px links, black Download pill
-  station-stage: muted pastel gradient field, product window on paper, soft pop shadow
+  button-primary: slate fill, mist text, full pill, hover flare on shell
+  button-secondary: hairline ring slate/20, hover ring + text flare
+  nav: sticky mist/85 blur, orange dot mark, quiet 15px links, slate Download pill
+  pinned-screen: bare rounded 16:10 desktop capture, deep cast shadow, no bezel
+  reveal: binary 0.1 to 1 glyph flip, scrubbed, display type only off the landing route
 ---
 
 # Design System - Halo Marketing Site
@@ -113,3 +111,186 @@ Soft ambient only. No ink-offset sticker shadows on marketing chrome.
 - **Don't** paint marketing sections `--sun`.
 - **Don't** restore 2.5px ink outlines or offset sticker shadows on chrome.
 - **Don't** invent testimonials, metrics, or a live installer URL.
+
+---
+## Site Theme — "The Desktop on a Table"
+
+Adapted from the [Midlife Engineering](https://www.midlife.engineering/)
+reference and now used by **every** route. Tokens live under `.landing` in
+`app/globals.css`; `ChromeGate` applies that class around the header and footer
+for ordinary routes, and `LandingShell` applies it on `/`, which carries its own
+fixed chrome and closing lockup instead.
+
+The editorial paper system documented above is **retired** — kept here only as
+the anti-reference. Do not reintroduce `--paper`, `--ink`, `--line`, Source
+Serif display type or the pastel gradient stages on marketing chrome.
+
+**Creative North Star: "one screen, pinned, that the page flows around."**
+
+A single Windows display is fixed to the viewport for the entire page. It
+drifts, rescales and swaps its capture on scroll while mist-ground mega type
+and body copy move underneath it. No bezel, no chassis, no invented device
+furniture — a rounded screen with a deep cast shadow, showing real captures of
+Halo running on a real desktop.
+
+### Colours
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `--mist` | `#EBEBEB` | The page ground. Never white. |
+| `--mist-deep` | `#E2E2E2` | Menu toggle well |
+| `--slate` | `#262626` | All type |
+| `--slate-soft` | `#7D7D7D` | Copyright, source labels |
+| `--slate-faint` | `#A8A8A8` | Column labels ("How it works") |
+| `--flare` | `#FF611A` | The single accent |
+| `--shell` | `#0A0A0A` | Menu-sheet CTA text on flare |
+
+**The One Flare Rule.** Orange is the only chroma on the page: the brand dot
+and the emphasis clause in a revealed statement. The blues and yellows inside
+the captures are product UI, not marketing colour.
+
+### Typography
+
+- Display and body: **Switzer** 400/500/600/700, self-hosted from
+  `public/fonts/`. Stands in for the reference's PP Neue Montreal, which is not
+  licensed for redistribution; same neo-grotesk skeleton and tight sidebearings.
+- Readouts and micro-labels: **Fragment Mono** 400 — the reference's own mono,
+  available on Google Fonts, so this one is an exact match.
+- Mega lockup: `.landing-mega`, `clamp(3.25rem, 17.4vw, 17rem)`, weight 500,
+  leading `0.84`, tracking `-0.035em`. Sized to bleed the viewport.
+
+### The pinned screen
+
+Sizing is `min(1200px, 62vw, 92vh)`. The `92vh` term matters: a 16:10 panel
+sized purely off `vw` overflows the top of a short viewport, and **the notch
+lives in the top of the capture**, so the top edge may never leave the frame.
+That constraint, not taste, sets the scale floor at 0.86.
+
+Captures render at `quality={100}`. These are screenshots of UI — 8px system
+type, 1px hairlines — and the default quality-75 re-encode smears both.
+
+Motion was traced by sampling the reference's own fixed element at 1440x900,
+which corrected two assumptions worth recording:
+
+1. It is a **pure translate + scale**. There is no CSS rotation anywhere; the
+   tilt people read on that site is painted into its artwork.
+2. It **never gets small**. Rendered width stays between 79% and 108% of the
+   viewport for the whole page.
+
+Beats come in pairs — arrive, then hold — so the screen is still while a
+section is read rather than permanently mid-drift. Transform keyframes are
+interpolated by hand from the table in a resident rAF loop; a chained GSAP
+timeline does not re-render duplicate hold keyframes reliably under a scrub,
+and an event-driven loop that stopped on convergence left the screen a whole
+section behind.
+
+**The Dodge Rule.** Every beat that parks the screen against an edge is paired
+with a `Proof.align` that puts that section's copy on the opposite half of the
+viewport (`left` / `right`), at reading height. When the screen is centred the
+copy drops beneath it (`center`). The screen never sits on the words.
+
+Per-resolution tuning lives in `tuning()`: at or above 1600px the excursion is
+damped to 0.6 (an `x` in viewport widths throws the screen much further out at
+1920 than at 1440, leaving a dead gap) and edge beats scale up 1.12x into the
+spare room. Below that, the plain undamped 1:1 treatment.
+
+### Other motion
+
+All of it opts out under `prefers-reduced-motion`.
+
+- **Eased scroll** (`useSmoothScroll`) — wheel and keyboard move a target
+  offset; a rAF loop lerps `window.scrollY` toward it at `0.11`. Drives native
+  scroll rather than a transformed wrapper, because a transformed ancestor
+  would break the fixed screen. Skipped on coarse pointers.
+- **Typing reveal** (`RevealText`) — see below.
+- **Bands** (`Band`) — mega marquee type translated `xPercent 0 → -50` over the
+  section's viewport pass. Scroll-driven, not timed.
+- **Loader** (`BootScreen`) — see below.
+- **Route enter** (`PageTransition`) — see below.
+
+### The loader
+
+The sheet opens near-black. Square tiles land one at a time in a scattered
+order until they have paved the viewport in mist, so the screen runs dark to
+white as it loads and ends on the page's own ground. A counter rides along,
+climbing 0 to 100%.
+
+The counter is **one of the squares**, not a badge sitting on top of them: same
+footprint as every other cell, filled flare, count in bold white. It steps
+along a single axis at a time — same row or same column, never a diagonal
+jump — and only ever onto a square that has not been paved yet at that point in
+the fill, so it reads as a tile sliding into open ground rather than a cursor
+skittering about. Five hops across the fill, each a 320ms glide.
+
+The grid is measured on the client, so the server renders only the dark field.
+Nothing to mismatch on hydration, and the cover is up from the first paint
+either way. Values written into tile styles are rounded and use literal hex
+rather than `var()`: sub-millisecond precision and CSS vars in a shorthand do
+not survive the SSR serialise/re-parse round trip, which trips hydration.
+
+### Route transitions
+
+The incoming page rises in behind a short blur, keyed on pathname so the
+wrapper remounts and the animation restarts on every navigation.
+
+Enter-only, and CSS rather than a JS animation driver. React's
+`<ViewTransition>` would be the natural fit but is a canary-only export, and
+this project pins react 19.2.8. `AnimatePresence mode="wait"` is the obvious
+fallback and is a poor one here: it holds the incoming child until the outgoing
+one finishes exiting, and the App Router swaps `children` the instant the route
+resolves.
+
+**The keyframe carries no `animation-fill-mode`.** Outside the animation's
+active period the element falls back to its normal, fully visible styles — so
+if animations never run, the worst case is no transition rather than a page
+stuck at `opacity: 0`. An inline `opacity: 0` set by a JS driver has no such
+floor. Verified by cancelling every animation on the document and confirming
+the wrapper still computes to `opacity: 1`.
+
+### The typing reveal
+
+Measured off the reference rather than eyeballed, because two details decide
+whether it reads as typing or as a soft fade:
+
+1. **The flip is binary.** Sampling every glyph mid-sweep on the reference
+   returns only `0.1` or `1` — never a value in between. The boundary travels
+   like a typing cursor, left to right, line after line. Give each glyph a real
+   fade instead and dozens sit part-way at once, which reads as whole lines
+   resolving in blocks. `RevealText` gets this with a near-zero `duration`
+   against a `stagger` that spans the sweep.
+2. **Resting opacity is `0.1`**, with colour already final — so an ink glyph
+   reads pale grey on the mist and an accent glyph reads pale orange.
+
+Spaces are never dimmed, so word gaps stay stable as the front passes.
+
+**Windows.** `default` is the reference's own: block top at 88% of the viewport
+through block top at 42%. `early` (105% → 66%) is for copy sitting directly
+beneath the pinned screen — that copy slides under the screen once its top
+passes roughly 58%, so the default window would finish out of sight and the
+tail of the sentence would never be seen revealing.
+
+**Granularity.** `char` matches the reference exactly and belongs on display
+type. `word` gives body copy the same sweep at a fraction of the node count; at
+15px the difference is invisible.
+
+**Where to use it.** On the landing page, freely — it is the page's signature.
+Everywhere else, **display type only**: the `h1` and section `h2`s. Body copy,
+lists and labels on secondary pages stay plain, or the effect stops reading as
+emphasis and starts reading as a loading state.
+
+
+### Structure
+
+Boot sheet → hero lockup → manifesto → band → four proof screens → band →
+spec marquee → band → download lockup.
+
+### Do's and Don'ts
+
+- **Do** keep the ground mist and let the captures carry all the colour.
+- **Do** pair every edge beat with the opposite copy lane.
+- **Don't** let the screen's top edge leave the viewport — it crops the notch.
+- **Don't** invent testimonials. Where the reference runs quote cards, this
+  page runs `specs` — code-backed counts with a named source.
+- **Don't** promise an installer. The closing lockup links to `/download` and
+  says the build is not out yet.
+- **Don't** leak landing tokens onto the paper routes, or vice versa.

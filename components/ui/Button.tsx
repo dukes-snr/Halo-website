@@ -6,10 +6,11 @@ import { motion } from "motion/react";
 
 type Variant = "primary" | "secondary" | "ghost";
 
+// Landing idiom: ink pill that turns flare on hover, hairline ghost beside it.
 const variants: Record<Variant, string> = {
-  primary: "bg-ink text-paper hover:bg-ink/90",
-  secondary: "bg-paper text-ink ring-1 ring-ink/15 hover:ring-ink/40",
-  ghost: "bg-transparent text-ink/70 hover:text-ink",
+  primary: "bg-slate text-mist hover:bg-flare hover:text-shell",
+  secondary: "text-slate ring-1 ring-slate/20 hover:ring-flare hover:text-flare",
+  ghost: "bg-transparent text-slate-soft hover:text-flare",
 };
 
 type Props = {

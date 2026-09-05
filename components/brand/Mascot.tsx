@@ -58,7 +58,7 @@ export function Mascot({
           avatar.current?.play(pokeAnimation);
         }
       }}
-      className={`cursor-pointer select-none outline-none focus-visible:ring-4 focus-visible:ring-ink/30 rounded-full ${className}`}
+      className={`cursor-pointer select-none outline-none focus-visible:ring-4 focus-visible:ring-flare/40 rounded-full ${className}`}
     />
   );
 }

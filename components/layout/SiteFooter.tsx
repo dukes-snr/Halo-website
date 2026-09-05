@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import { nav, site } from "@/lib/content";
-import { Logo } from "@/components/brand/Logo";
 import { Mascot } from "@/components/brand/Mascot";
+import { LogoMark } from "@/components/brand/Logo";
+import { chrome } from "@/lib/landing-content";
 
 function FooterMascot() {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -27,7 +28,7 @@ function FooterMascot() {
         }}
       >
         <Mascot
-          size={108}
+          size={96}
           animation="idle"
           hoverAnimation="curious"
           pokeAnimation="playful"
@@ -38,22 +39,40 @@ function FooterMascot() {
   );
 }
 
+/**
+ * Footer for every route except `/`, which closes with its own mega lockup.
+ * Same parts as that lockup — big wordmark, strap, copyright — one step down
+ * in scale so it reads as the quiet version of the same idea.
+ */
 export function SiteFooter() {
   return (
-    <footer className="border-t border-line bg-paper">
-      <div className="mx-auto w-full max-w-[1120px] px-5 py-16 md:px-8 md:py-20">
-        <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between md:gap-16">
-          <div className="flex max-w-[380px] items-start gap-5">
+    <footer className="mt-24 px-5 pb-6 md:px-8 md:pb-8">
+      <div className="mx-auto w-full max-w-[1360px]">
+        <Link
+          href="/download"
+          className="block text-[clamp(2.5rem,11vw,8rem)] font-medium leading-[0.86] tracking-[-0.035em] transition-colors duration-300 hover:text-flare"
+        >
+          <span className="sr-only">Download Halo for Windows</span>
+          <span aria-hidden="true" className="block">
+            download
+          </span>
+          <span aria-hidden="true" className="block">
+            for windows
+          </span>
+        </Link>
+
+        <div className="mt-10 flex flex-col gap-10 border-t border-slate/10 pt-8 md:flex-row md:justify-between">
+          <div className="flex max-w-[400px] items-start gap-5">
+            {/* The mark, then the pokeable mascot beside it — the logo is the
+                brand, the mascot is the product feature. */}
+            <Link href="/" aria-label="Halo home" className="shrink-0 pt-1">
+              <LogoMark size={44} />
+            </Link>
             <FooterMascot />
-            <div className="pt-2">
-              <Link href="/" className="inline-flex">
-                <Logo />
-              </Link>
-              <p className="mt-3 text-[14px] leading-relaxed text-ink/55">
-                {site.tagline}. Native Windows, local-first, assistant off by
-                default.
-              </p>
-            </div>
+            <p className="pt-2 text-[14px] leading-relaxed text-slate-soft">
+              {site.tagline}. Native Windows, local-first, assistant off by
+              default.
+            </p>
           </div>
 
           <nav
@@ -64,24 +83,31 @@ export function SiteFooter() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-[14px] text-ink/50 transition-colors hover:text-ink"
+                className="text-[14px] text-slate-soft transition-colors hover:text-flare"
               >
                 {item.label}
               </Link>
             ))}
-            <Link href="/features" className="text-[14px] text-ink/50 transition-colors hover:text-ink">
-              All features
-            </Link>
-            <Link href="/changelog" className="text-[14px] text-ink/50 transition-colors hover:text-ink">
-              Updates
-            </Link>
-            <Link href="/download" className="text-[14px] text-ink/50 transition-colors hover:text-ink">
-              Download
-            </Link>
+            {[
+              { href: "/features", label: "All features" },
+              { href: "/changelog", label: "Updates" },
+              { href: "/download", label: "Download" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-[14px] text-slate-soft transition-colors hover:text-flare"
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
 
-        <p className="mt-14 text-[13px] text-ink/40">© 2026 Halo</p>
+        <div className="mt-8 flex flex-wrap items-end justify-between gap-4 text-[13px]">
+          <p>{chrome.strap}</p>
+          <p className="text-slate-soft">{chrome.copyright}</p>
+        </div>
       </div>
     </footer>
   );

@@ -97,7 +97,7 @@ export function FeatureVideo({
             setTheater(true);
           }
         } : undefined}
-        className={`group relative overflow-hidden bg-ink outline-none focus-visible:ring-2 focus-visible:ring-paper ${openOnSurface ? "cursor-pointer" : ""} ${className}`}
+        className={`group relative overflow-hidden bg-shell outline-none focus-visible:ring-2 focus-visible:ring-flare ${openOnSurface ? "cursor-pointer" : ""} ${className}`}
       >
         <video
           ref={videoRef}
@@ -117,13 +117,13 @@ export function FeatureVideo({
           <source src={src} type="video/mp4" />
           Your browser does not support embedded videos.
         </video>
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/70 to-transparent px-4 pb-3 pt-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100 md:px-5 md:pb-4">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-shell/80 to-transparent px-4 pb-3 pt-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100 md:px-5 md:pb-4">
           <div className="flex items-end justify-between">
             <button
               type="button"
               aria-label={playing ? "Pause" : "Play"}
               onClick={togglePlayback}
-              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-full bg-paper text-ink"
+              className="pointer-events-auto inline-flex h-8 w-8 items-center justify-center rounded-full bg-mist text-shell"
             >
               {playing ? <Pause className="h-3.5 w-3.5 fill-current" aria-hidden /> : <Play className="ml-0.5 h-3.5 w-3.5 fill-current" aria-hidden />}
             </button>
@@ -135,7 +135,7 @@ export function FeatureVideo({
                 e.stopPropagation();
                 setTheater(true);
               }}
-              className="pointer-events-auto text-[11px] font-medium tracking-[0.08em] text-paper/80 uppercase hover:text-paper"
+              className="pointer-events-auto text-[11px] font-medium tracking-[0.08em] text-mist/80 uppercase hover:text-mist"
             >
               Focus
             </button>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Geist_Mono, Source_Serif_4 } from "next/font/google";
+import { Fragment_Mono, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import Script from "next/script";
 import { ChromeGate } from "@/components/layout/ChromeGate";
 import { site } from "@/lib/content";
@@ -12,6 +12,26 @@ const satoshi = localFont({
     { path: "../public/fonts/Satoshi-Medium.woff2", weight: "500" },
   ],
   variable: "--font-satoshi",
+  display: "swap",
+});
+
+// Switzer stands in for the reference site's PP Neue Montreal, which is not
+// licensed for redistribution. Same neo-grotesk skeleton, tight sidebearings.
+const switzer = localFont({
+  src: [
+    { path: "../public/fonts/Switzer-Regular.woff2", weight: "400" },
+    { path: "../public/fonts/Switzer-Medium.woff2", weight: "500" },
+    { path: "../public/fonts/Switzer-Semibold.woff2", weight: "600" },
+    { path: "../public/fonts/Switzer-Bold.woff2", weight: "700" },
+  ],
+  variable: "--font-switzer",
+  display: "swap",
+});
+
+const fragmentMono = Fragment_Mono({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-fragment-mono",
   display: "swap",
 });
 
@@ -61,9 +81,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${satoshi.variable} ${sourceSerif.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${satoshi.variable} ${sourceSerif.variable} ${geistMono.variable} ${switzer.variable} ${fragmentMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-paper text-ink">
+      <body className="flex min-h-full flex-col bg-mist text-slate">
         <div
           dangerouslySetInnerHTML={{
             __html: [

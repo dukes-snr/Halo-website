@@ -1,28 +1,28 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-import { Hero } from "@/components/marketing/Hero";
-import { StationsSection } from "@/components/marketing/StationsSection";
-import { PrinciplesBand } from "@/components/marketing/PrinciplesBand";
-import { ChangelogTeaser } from "@/components/marketing/ChangelogTeaser";
-import { PrivacyBand } from "@/components/marketing/PrivacyBand";
-import { Faq } from "@/components/marketing/Faq";
-import { CtaSection } from "@/components/marketing/CtaSection";
-
-const droppyMockHtml = readFileSync(
-  join(process.cwd(), "components/marketing/droppy/droppy-mock.html"),
-  "utf8",
-);
+import { Band } from "@/components/landing/Band";
+import { EndCta } from "@/components/landing/EndCta";
+import { HeroBlock } from "@/components/landing/HeroBlock";
+import { LandingShell } from "@/components/landing/LandingShell";
+import { Manifesto } from "@/components/landing/Manifesto";
+import { ProofSection } from "@/components/landing/ProofSection";
+import { SpecMarquee } from "@/components/landing/SpecMarquee";
+import { bands, proofs } from "@/lib/landing-content";
 
 export default function HomePage() {
   return (
-    <>
-      <Hero droppyMockHtml={droppyMockHtml} />
-      <StationsSection />
-      <PrinciplesBand />
-      <ChangelogTeaser />
-      <PrivacyBand />
-      <Faq />
-      <CtaSection />
-    </>
+    <LandingShell>
+      <HeroBlock />
+      <Manifesto />
+
+      <Band {...bands.proof} />
+      {proofs.map((proof) => (
+        <ProofSection key={proof.id} proof={proof} />
+      ))}
+
+      <Band {...bands.specs} />
+      <SpecMarquee />
+
+      <Band {...bands.close} />
+      <EndCta />
+    </LandingShell>
   );
 }

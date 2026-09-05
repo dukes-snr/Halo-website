@@ -3,17 +3,26 @@
 import { useState } from "react";
 import type { ReleaseCard, SectionView } from "@/lib/changelog";
 
+function Item({ text }: { text: string }) {
+  return (
+    <li className="flex items-start gap-2.5 text-[14px] leading-[1.6] text-slate">
+      <span aria-hidden className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-flare" />
+      {text}
+    </li>
+  );
+}
+
 function Section({ section }: { section: SectionView }) {
   const [open, setOpen] = useState(false);
+
   return (
-    <div className="cl-section mt-5">
-      <h4 className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] text-ink/45">{section.title}</h4>
-      <ul className="mt-2 space-y-2">
+    <div className="cl-section mt-6">
+      <h4 className="landing-readout text-[10px] text-slate-faint">
+        {section.title}
+      </h4>
+      <ul className="mt-2.5 space-y-2">
         {section.visible.map((item) => (
-          <li key={item} className="flex items-start gap-2.5 text-[13.5px] leading-[1.55] text-ink/75 md:text-[14px]">
-            <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-ink" />
-            {item}
-          </li>
+          <Item key={item} text={item} />
         ))}
       </ul>
       {section.hasMore ? (
@@ -21,16 +30,13 @@ function Section({ section }: { section: SectionView }) {
           {open ? (
             <ul className="cl-section__list--more mt-2 space-y-2">
               {section.overflow.map((item) => (
-                <li key={item} className="flex items-start gap-2.5 text-[13.5px] leading-[1.55] text-ink/75 md:text-[14px]">
-                  <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-ink" />
-                  {item}
-                </li>
+                <Item key={item} text={item} />
               ))}
             </ul>
           ) : null}
           <button
             type="button"
-            className="cl-more mt-3 text-[13px] font-bold text-ink underline decoration-2 underline-offset-4"
+            className="cl-more landing-readout mt-3 text-[10px] text-slate-soft transition-colors hover:text-flare"
             onClick={() => setOpen((value) => !value)}
           >
             {open ? "Show less" : `Show more (${section.overflow.length})`}
@@ -41,28 +47,37 @@ function Section({ section }: { section: SectionView }) {
   );
 }
 
+/**
+ * One release, in the landing idiom: hairline rules instead of a ringed card,
+ * Fragment Mono for the version and section labels, flare on the bullets.
+ */
 export function ChangelogReleaseCard({ card }: { card: ReleaseCard }) {
   return (
-    <article className="cl-card relative grid gap-5 md:grid-cols-[230px_minmax(0,1fr)] md:gap-10" data-version={card.version}>
-      <header className="relative md:pl-12 md:pt-1">
-        <span aria-hidden className="absolute left-0 top-2 hidden h-2 w-2 rounded-full bg-ink md:block" />
-        <p className="text-[12px] text-ink/45">{card.date ?? "Pre-release"}</p>
-        <h2 className="mt-1 font-display text-[24px] font-semibold leading-tight tracking-[-0.02em] text-ink md:text-[27px]">
+    <article
+      className="cl-card relative grid gap-6 border-t border-slate/12 pt-10 md:grid-cols-[220px_minmax(0,1fr)] md:gap-12"
+      data-version={card.version}
+    >
+      <header className="relative md:pt-1">
+        <p className="landing-readout text-[10px] text-slate-faint">
+          {card.date ?? "Pre-release"}
+        </p>
+        <h2 className="mt-2 text-[26px] font-medium leading-tight tracking-[-0.03em] md:text-[30px]">
           {card.version}
         </h2>
       </header>
-      <div className="overflow-hidden rounded-[24px] ring-1 ring-line">
-        <div className="border-b border-line bg-haze px-6 py-5 md:px-8">
-          <h3 className="font-display text-[24px] font-semibold leading-tight tracking-[-0.02em] text-ink md:text-[28px]">
-            {card.headline}
-          </h3>
-        </div>
-        <div className="p-6 md:p-8">
-          {card.summary ? <p className="text-[14px] leading-[1.6] text-ink/70 md:text-[15px]">{card.summary}</p> : null}
-          {card.sections.map((section) => (
-            <Section key={section.title} section={section} />
-          ))}
-        </div>
+
+      <div>
+        <h3 className="text-[clamp(1.25rem,2.4vw,1.75rem)] font-medium leading-[1.2] tracking-[-0.028em]">
+          {card.headline}
+        </h3>
+        {card.summary ? (
+          <p className="mt-3 max-w-[62ch] text-[15px] leading-[1.6] text-slate-soft">
+            {card.summary}
+          </p>
+        ) : null}
+        {card.sections.map((section) => (
+          <Section key={section.title} section={section} />
+        ))}
       </div>
     </article>
   );

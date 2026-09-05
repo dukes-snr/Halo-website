@@ -96,20 +96,20 @@ export function VideoLightbox({ src, label, onClose }: VideoLightboxProps) {
       aria-modal="true"
       aria-label={label}
       onMouseMove={bump}
-      className="fixed inset-0 z-[100] flex flex-col bg-ink"
+      className="fixed inset-0 z-[100] flex flex-col bg-shell"
     >
       <header
         className={`flex shrink-0 items-center justify-between px-5 py-4 transition-opacity duration-500 md:px-8 ${
           idle && playing ? "opacity-0" : "opacity-100"
         }`}
       >
-        <p className="font-display text-[18px] text-paper md:text-[22px]">{label}</p>
+        <p className="text-[18px] font-medium tracking-[-0.02em] text-mist md:text-[22px]">{label}</p>
         <button
           ref={closeRef}
           type="button"
           aria-label="Close"
           onClick={onClose}
-          className="text-[13px] text-paper/70 transition-colors hover:text-paper"
+          className="text-[13px] text-mist/70 transition-colors hover:text-mist"
         >
           Close
         </button>
@@ -158,24 +158,24 @@ export function VideoLightbox({ src, label, onClose }: VideoLightboxProps) {
           }}
           className="group relative h-6 cursor-pointer"
         >
-          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-paper/25" />
+          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-mist/25" />
           <span
-            className="absolute left-0 top-1/2 h-px -translate-y-1/2 bg-paper"
+            className="absolute left-0 top-1/2 h-px -translate-y-1/2 bg-mist"
             style={{ width: `${pct}%` }}
           />
           <span
-            className="absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-paper opacity-0 transition-opacity group-hover:opacity-100"
+            className="absolute top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-mist opacity-0 transition-opacity group-hover:opacity-100"
             style={{ left: `${pct}%` }}
           />
         </div>
 
-        <div className="mt-3 flex items-center justify-between text-paper">
+        <div className="mt-3 flex items-center justify-between text-mist">
           <div className="flex items-center gap-4">
             <button
               type="button"
               aria-label={playing ? "Pause" : "Play"}
               onClick={togglePlay}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-paper text-ink"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-mist text-shell"
             >
               {playing ? (
                 <Pause className="h-3.5 w-3.5 fill-current" aria-hidden />
@@ -183,7 +183,7 @@ export function VideoLightbox({ src, label, onClose }: VideoLightboxProps) {
                 <Play className="ml-0.5 h-3.5 w-3.5 fill-current" aria-hidden />
               )}
             </button>
-            <span className="text-[12px] tabular-nums text-paper/60">
+            <span className="text-[12px] tabular-nums text-mist/60">
               {fmt(progress)} / {fmt(duration)}
             </span>
           </div>
@@ -196,7 +196,7 @@ export function VideoLightbox({ src, label, onClose }: VideoLightboxProps) {
               video.muted = !video.muted;
               setMuted(video.muted);
             }}
-            className="text-paper/70 transition-colors hover:text-paper"
+            className="text-mist/70 transition-colors hover:text-mist"
           >
             {muted ? <VolumeX className="h-4 w-4" aria-hidden /> : <Volume2 className="h-4 w-4" aria-hidden />}
           </button>
