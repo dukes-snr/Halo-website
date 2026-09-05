@@ -49,15 +49,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  // Absolute base for OG and Twitter card URLs. Without it Next cannot resolve
+  // the image file conventions to absolute URLs, and social scrapers — which
+  // do not resolve relative paths — silently show no preview.
+  metadataBase: new URL("https://halo-notch.vercel.app"),
   title: {
     default: `${site.name} - Dynamic Island for Windows`,
     template: `%s · ${site.name}`,
   },
   description: site.description,
+  // `app/opengraph-image.png` and `app/twitter-image.png` are picked up by
+  // file convention, so no explicit `images` entry is needed here.
   openGraph: {
     title: `${site.name} - Dynamic Island for Windows`,
     description: site.description,
     type: "website",
+    siteName: site.name,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name} - Dynamic Island for Windows`,
+    description: site.description,
   },
   keywords: [
     "Dynamic Island Windows",
