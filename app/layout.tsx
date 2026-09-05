@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Fragment_Mono, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ChromeGate } from "@/components/layout/ChromeGate";
 import { site } from "@/lib/content";
 import "./globals.css";
@@ -112,6 +114,8 @@ export default function RootLayout({
           }}
         />
         <ChromeGate>{children}</ChromeGate>
+        <Analytics />
+        <SpeedInsights />
         {/* impeccable-live-start */}
         <Script
           src="http://localhost:8400/live.js?token=64636e39-1fa3-45cf-944d-e71ebfb95696"
