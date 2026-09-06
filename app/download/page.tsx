@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/Button";
 import { RevealText } from "@/components/landing/RevealText";
+import { WaitlistForm } from "@/components/marketing/WaitlistForm";
 
 export const metadata: Metadata = {
   title: "Download",
@@ -43,6 +44,10 @@ export default function DownloadPage() {
           not a web wrapper — with optional on-device models you control and can
           remove anytime.
         </p>
+
+        <div className="mt-10 max-w-[520px]">
+          <WaitlistForm />
+        </div>
       </section>
 
       <section className="mx-auto max-w-[1360px] px-5 md:px-8">

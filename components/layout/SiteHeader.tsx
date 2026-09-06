@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/Logo";
 import { NavMenu } from "@/components/layout/NavMenu";
+import { WaitlistCta } from "@/components/layout/WaitlistCta";
 
 /**
  * Header for every route except `/`, which carries its own fixed chrome.
@@ -22,7 +23,10 @@ export function SiteHeader() {
           <Logo size={30} priority />
         </Link>
 
-        <NavMenu />
+        <div className="flex items-center gap-2.5 md:gap-3">
+          <WaitlistCta />
+          <NavMenu />
+        </div>
       </div>
     </header>
   );

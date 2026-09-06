@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LogoMark } from "@/components/brand/Logo";
 import { NavMenu } from "@/components/layout/NavMenu";
+import { WaitlistCta } from "@/components/layout/WaitlistCta";
 import { chrome } from "@/lib/landing-content";
 
 /**
@@ -26,7 +27,10 @@ export function LandingChrome() {
         {chrome.tagline}
       </p>
 
-      <NavMenu />
+      <div className="flex items-center gap-2.5 md:gap-3">
+        <WaitlistCta />
+        <NavMenu />
+      </div>
     </div>
   );
 }
