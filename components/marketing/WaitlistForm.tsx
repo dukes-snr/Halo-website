@@ -75,23 +75,24 @@ export function WaitlistForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate>
+    <form onSubmit={onSubmit} noValidate className="relative">
       <label htmlFor="waitlist-email" className="landing-readout text-[11px] text-slate-soft">
         Get notified at launch
       </label>
 
-      <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+      <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
         <input
           id="waitlist-email"
           type="email"
           required
           autoComplete="email"
           inputMode="email"
+          enterKeyHint="send"
           placeholder="you@example.com"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           aria-describedby="waitlist-status"
-          className="h-12 min-w-0 flex-1 rounded-full bg-mist-deep/70 px-5 text-[15px] text-slate outline-none ring-1 ring-inset ring-slate/12 transition-shadow placeholder:text-slate-faint focus-visible:ring-2 focus-visible:ring-flare"
+          className="h-12 w-full min-w-0 shrink-0 appearance-none rounded-full bg-mist-deep/70 px-5 text-[16px] leading-none text-slate ring-1 ring-inset ring-slate/12 transition-shadow placeholder:text-slate-faint focus-visible:outline-none! focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-flare sm:flex-1 sm:text-[15px]"
         />
 
         {/* Honeypot — hidden from people, irresistible to bots. */}

@@ -48,7 +48,7 @@ export function Band({ text, glyph }: { text: string; glyph: string }) {
   );
 
   return (
-    <section ref={sectionRef} className="relative z-10 overflow-hidden py-[9vh]">
+    <section ref={sectionRef} className="relative z-10 overflow-hidden py-6 md:py-[9vh]">
       {/* The line is read once; the repetition is visual rhythm only. */}
       <h2 className="sr-only">{text}</h2>
       <div

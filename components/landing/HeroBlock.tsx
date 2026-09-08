@@ -8,13 +8,13 @@ import { chrome, heroBlock, screens } from "@/lib/landing-content";
  */
 export function HeroBlock() {
   return (
-    <section className="relative z-10 flex min-h-svh flex-col justify-end px-5 pb-5 md:px-8 md:pb-7">
+    <section className="relative z-10 flex flex-col px-5 pb-6 pt-[5.25rem] md:min-h-svh md:justify-end md:px-8 md:pb-7 md:pt-0">
       {/* The pinned unit is desktop-only; small screens get it in the flow.
           The in-flow shot carries its own alt. On `md+` the pinned copy is
           aria-hidden, so the hero states in text what it shows. */}
       <p className="sr-only max-md:hidden">{screens.home.alt}.</p>
 
-      <div className="mb-10 mt-28 md:hidden">
+      <div className="mb-6 md:hidden">
         <UnitChassis screen="home" priority />
       </div>
 

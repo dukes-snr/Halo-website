@@ -33,17 +33,17 @@ export function ProofSection({ proof }: { proof: Proof }) {
   return (
     <section
       id={proof.id}
-      className="relative z-10 flex min-h-svh items-start px-5 pb-16 pt-24 md:items-center md:px-8 md:py-0"
+      className="relative z-10 px-5 py-10 md:flex md:min-h-svh md:items-center md:px-8 md:py-0"
     >
       {/* Wide lane cap: on a 1920 display the copy has to sit far enough out
           to clear the screen's edge beat, which scales up past the frame. */}
       <div
         className={`mx-auto flex w-full max-w-[1680px] flex-col items-center md:flex-row md:items-stretch ${row}`}
       >
-        <div className="mb-8 w-full md:hidden">
+        <div className="mb-6 w-full md:hidden">
           <UnitChassis screen={proof.screen} />
         </div>
-        <div className={`w-full max-w-[660px] pb-[4vh] pt-0 md:pt-[20vh] ${col}`}>
+        <div className={`w-full max-w-[660px] md:pb-[4vh] md:pt-[20vh] ${col}`}>
           <RevealText
             as="h2"
             runs={proof.statement}
@@ -51,7 +51,7 @@ export function ProofSection({ proof }: { proof: Proof }) {
             className="text-[clamp(1.2rem,2.5vw,1.85rem)] font-medium leading-[1.22] tracking-[-0.028em]"
           />
 
-          <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2 md:mt-9">
+          <div className="mt-7 grid gap-x-10 gap-y-7 sm:grid-cols-2 md:mt-9">
             {[proof.how, proof.hood].map((column) => (
               <div key={column.label}>
                 <RevealText

@@ -193,7 +193,9 @@ copy drops beneath it (`center`). The screen never sits on the words.
 cannot park beside copy on a phone, so each section carries its matching
 capture in the flow instead of shrinking the choreography. Hero shows `home`,
 the four proof bands show `media` / `shelf` / `ai` / `control`, and the spec
-row shows `apps`.
+row shows `apps`. Mobile is a stacked figure/caption catalog — screenshot
+then its claim, no `min-h-svh` stages — because those viewport holds exist
+to clear the pinned screen, and without it they are empty mist.
 
 Per-resolution tuning lives in `tuning()`: at or above 1600px the excursion is
 damped to 0.6 (an `x` in viewport widths throws the screen much further out at

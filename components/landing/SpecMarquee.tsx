@@ -11,8 +11,8 @@ export function SpecMarquee() {
   return (
     // Sits low in the viewport so the pinned unit, which parks across the top
     // band on this stretch of the page, never lands on the cards.
-    <section className="marquee-cards-track relative z-10 flex min-h-svh flex-col overflow-hidden pb-[18vh] pt-24 md:justify-end md:pt-0">
-      <div className="px-5 pb-10 md:hidden">
+    <section className="marquee-cards-track relative z-10 overflow-hidden py-10 md:flex md:min-h-svh md:flex-col md:justify-end md:pb-[18vh] md:pt-0">
+      <div className="px-5 pb-6 md:hidden">
         <UnitChassis screen="apps" />
       </div>
       <h2 className="sr-only">Halo by the numbers</h2>

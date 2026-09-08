@@ -8,7 +8,7 @@ import { chrome, endCta } from "@/lib/landing-content";
  */
 export function EndCta() {
   return (
-    <footer className="relative z-10 flex min-h-svh flex-col justify-end px-5 pb-5 md:px-8 md:pb-7">
+    <footer className="relative z-10 px-5 pb-8 pt-4 md:flex md:min-h-svh md:flex-col md:justify-end md:px-8 md:pb-7 md:pt-0">
       <Link
         href={endCta.href}
         className="landing-mega group block transition-colors duration-300 hover:text-flare"
