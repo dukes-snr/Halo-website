@@ -9,16 +9,13 @@ import { chrome, heroBlock, screens } from "@/lib/landing-content";
 export function HeroBlock() {
   return (
     <section className="relative z-10 flex min-h-svh flex-col justify-end px-5 pb-5 md:px-8 md:pb-7">
-      {/* The pinned unit is desktop-only; small screens get it in the flow. */}
-      {/* The chassis is decorative in both copies, so the hero states in text
-          what it shows — the pinned desktop copy lives in an aria-hidden
-          layer and would otherwise leave nothing to describe the product. */}
-      <p className="sr-only">
-        {screens.home.alt}.
-      </p>
+      {/* The pinned unit is desktop-only; small screens get it in the flow.
+          The in-flow shot carries its own alt. On `md+` the pinned copy is
+          aria-hidden, so the hero states in text what it shows. */}
+      <p className="sr-only max-md:hidden">{screens.home.alt}.</p>
 
       <div className="mb-10 mt-28 md:hidden">
-        <UnitChassis beat={0} />
+        <UnitChassis screen="home" priority />
       </div>
 
       <h1 className="landing-mega">

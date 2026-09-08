@@ -3,7 +3,13 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
-import { SCREEN_H, SCREEN_W, screenBeats, screens } from "@/lib/landing-content";
+import {
+  SCREEN_H,
+  SCREEN_W,
+  screenBeats,
+  screens,
+  type ScreenKey,
+} from "@/lib/landing-content";
 
 /**
  * The persistent object, borrowed from the reference site's fixed synth: one
@@ -88,50 +94,46 @@ function tuning(width: number) {
   return { edgeScale: large ? 1.12 : 1, xDamp: large ? 0.6 : 1 };
 }
 
-const screenKeys = Object.keys(screens) as (keyof typeof screens)[];
+const screenKeys = Object.keys(screens) as ScreenKey[];
+
+const frameClass =
+  "shell-shadow relative overflow-hidden rounded-[14px] md:rounded-[20px]";
 
 /**
- * The screen itself, stateless apart from which beat it is showing. Always
- * decorative: the pinned copy sits in an `aria-hidden` layer and the in-flow
- * copy is described by the hero's own text, so the captures stay silent
- * rather than announcing six stacked images.
+ * One capture, in the document flow. Used on small screens where the pinned
+ * unit does not travel — each section carries the shot that the desktop
+ * choreography would have parked here.
+ *
+ * These are screenshots of UI: 8px system type and 1px hairlines. The default
+ * quality 75 re-encode smears both, so ask for the full-quality variant
+ * (allowed by `images.qualities` in the config).
  */
 export function UnitChassis({
-  beat,
+  screen,
   className = "",
+  priority = false,
 }: {
-  beat: number;
+  screen: ScreenKey;
   className?: string;
+  priority?: boolean;
 }) {
-  const active = screenBeats[beat] ?? screenBeats[0];
+  const shot = screens[screen];
 
   return (
     <div
-      className={`shell-shadow relative overflow-hidden rounded-[14px] md:rounded-[20px] ${className}`}
+      className={`${frameClass} ${className}`}
       style={{ aspectRatio: `${SCREEN_W} / ${SCREEN_H}` }}
     >
-      {screenKeys.map((key) => {
-        const shot = screens[key];
-        return (
-          <Image
-            key={key}
-            src={shot.src}
-            alt=""
-            width={SCREEN_W}
-            height={SCREEN_H}
-            priority={key === "home"}
-            // These are screenshots of UI: 8px system type and 1px hairlines.
-            // The default quality 75 re-encode smears both, so ask for the
-            // full-quality variant (allowed by `images.qualities` in the
-            // config) and size for the largest the screen ever renders at —
-            // 60vw base times the 1.15 edge scale.
-            quality={100}
-            sizes="(max-width: 768px) 92vw, 70vw"
-            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-out"
-            style={{ opacity: active.screen === key ? 1 : 0 }}
-          />
-        );
-      })}
+      <Image
+        src={shot.src}
+        alt={shot.alt}
+        width={SCREEN_W}
+        height={SCREEN_H}
+        priority={priority}
+        quality={100}
+        sizes="(max-width: 768px) 92vw, 70vw"
+        className="h-full w-full object-cover"
+      />
     </div>
   );
 }
@@ -156,7 +158,40 @@ function sample(progress: number) {
   };
 }
 
-/** Viewport-pinned screen for pointer viewports. Mobile gets a static one. */
+function PinnedStack({ beat }: { beat: number }) {
+  const active = screenBeats[beat] ?? screenBeats[0];
+
+  return (
+    <div
+      className={frameClass}
+      style={{ aspectRatio: `${SCREEN_W} / ${SCREEN_H}` }}
+    >
+      {screenKeys.map((key) => {
+        const shot = screens[key];
+        return (
+          <Image
+            key={key}
+            src={shot.src}
+            alt=""
+            width={SCREEN_W}
+            height={SCREEN_H}
+            priority={key === "home"}
+            quality={100}
+            sizes="70vw"
+            className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ease-out"
+            style={{ opacity: active.screen === key ? 1 : 0 }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * Viewport-pinned screen for `md` and up. Below that breakpoint there is no
+ * room to park a 16:10 desktop beside copy, so each section renders its own
+ * `UnitChassis` in the flow instead of trying to scale this choreography down.
+ */
 export function HaloUnit() {
   const shellRef = useRef<HTMLDivElement>(null);
   const [beat, setBeat] = useState(0);
@@ -166,6 +201,7 @@ export function HaloUnit() {
     if (!node) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const wide = window.matchMedia("(min-width: 768px)");
 
     // The transform is interpolated by hand from the beat table rather than by
     // a chained GSAP timeline: the table holds a position across a section by
@@ -176,10 +212,12 @@ export function HaloUnit() {
     // ScrollTrigger callback. An event-driven version that stopped once it
     // converged missed later updates and left the screen a section behind.
     // Browsers already park rAF on hidden tabs, so a resident loop moving one
-    // element's transform costs nothing worth reclaiming.
+    // element's transform costs nothing worth reclaiming. It does not run
+    // below `md`, where this node is `display: none`.
     let current = 0;
     let frame = 0;
     let shown = -1;
+    let running = false;
 
     const progress = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -207,10 +245,29 @@ export function HaloUnit() {
       frame = window.requestAnimationFrame(loop);
     };
 
-    current = progress();
-    frame = window.requestAnimationFrame(loop);
+    const start = () => {
+      if (running) return;
+      running = true;
+      current = progress();
+      frame = window.requestAnimationFrame(loop);
+    };
 
-    return () => window.cancelAnimationFrame(frame);
+    const stop = () => {
+      running = false;
+      window.cancelAnimationFrame(frame);
+    };
+
+    const sync = () => {
+      if (wide.matches) start();
+      else stop();
+    };
+
+    sync();
+    wide.addEventListener("change", sync);
+    return () => {
+      stop();
+      wide.removeEventListener("change", sync);
+    };
   }, []);
 
   return (
@@ -227,7 +284,7 @@ export function HaloUnit() {
         className="w-[min(1200px,62vw,92vh)] shrink-0"
         style={{ willChange: "transform" }}
       >
-        <UnitChassis beat={beat} />
+        <PinnedStack beat={beat} />
       </div>
     </div>
   );

@@ -106,6 +106,11 @@ export type Proof = {
    * screen is directly above the copy rather than beside it.
    */
   align: "center" | "left" | "right";
+  /**
+   * Capture shown in-flow on small screens, where the pinned unit does not
+   * travel. Matches the `screenBeats` swap for this stretch of the page.
+   */
+  screen: ScreenKey;
   statement: RevealRun[];
   how: { label: string; body: string };
   hood: { label: string; body: string };
@@ -115,6 +120,7 @@ export const proofs: Proof[] = [
   {
     id: "media",
     align: "center",
+    screen: "media",
     statement: [
       { text: "Your player lives one glance up. Play, pause, skip and seek " },
       {
@@ -134,6 +140,7 @@ export const proofs: Proof[] = [
   {
     id: "files",
     align: "right",
+    screen: "shelf",
     statement: [
       { text: "Drag a file onto the notch and it becomes a decision, " },
       {
@@ -153,6 +160,7 @@ export const proofs: Proof[] = [
   {
     id: "ai",
     align: "left",
+    screen: "ai",
     statement: [
       { text: "Click the face and talk. It listens on this PC, answers on this PC, " },
       { text: "and stays off until you say otherwise.", accent: true },
@@ -169,6 +177,7 @@ export const proofs: Proof[] = [
   {
     id: "native",
     align: "center",
+    screen: "control",
     statement: [
       { text: "It is a native Windows app, not a browser in a trench coat, " },
       { text: "and nothing about you leaves the machine.", accent: true },

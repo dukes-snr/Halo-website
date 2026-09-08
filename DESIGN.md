@@ -189,6 +189,12 @@ with a `Proof.align` that puts that section's copy on the opposite half of the
 viewport (`left` / `right`), at reading height. When the screen is centred the
 copy drops beneath it (`center`). The screen never sits on the words.
 
+**The Narrow Rule.** Below `md` the pinned unit is hidden. A 16:10 desktop
+cannot park beside copy on a phone, so each section carries its matching
+capture in the flow instead of shrinking the choreography. Hero shows `home`,
+the four proof bands show `media` / `shelf` / `ai` / `control`, and the spec
+row shows `apps`.
+
 Per-resolution tuning lives in `tuning()`: at or above 1600px the excursion is
 damped to 0.6 (an `x` in viewport widths throws the screen much further out at
 1920 than at 1440, leaving a dead gap) and edge beats scale up 1.12x into the

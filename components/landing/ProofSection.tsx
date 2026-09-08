@@ -1,3 +1,4 @@
+import { UnitChassis } from "@/components/landing/HaloUnit";
 import { RevealText } from "@/components/landing/RevealText";
 import type { Proof } from "@/lib/landing-content";
 
@@ -5,8 +6,8 @@ import type { Proof } from "@/lib/landing-content";
  * One claim per screen, laid out around the pinned display rather than under
  * it. When the screen parks against an edge the copy takes the opposite half
  * of the viewport and sits at reading height; when the screen is centred the
- * copy drops beneath it. Below `md` the screen is in the flow, so every
- * variant collapses to the same centred column.
+ * copy drops beneath it. Below `md` there is no room to dodge, so the matching
+ * capture sits in the flow above a single centred column.
  */
 // Edge lanes keep a 6vw inset so a 2.3rem statement never leans on the
 // viewport edge, while still clearing the parked screen on the other half.
@@ -32,12 +33,17 @@ export function ProofSection({ proof }: { proof: Proof }) {
   return (
     <section
       id={proof.id}
-      className="relative z-10 flex min-h-svh items-center px-5 md:px-8"
+      className="relative z-10 flex min-h-svh items-start px-5 pb-16 pt-24 md:items-center md:px-8 md:py-0"
     >
       {/* Wide lane cap: on a 1920 display the copy has to sit far enough out
           to clear the screen's edge beat, which scales up past the frame. */}
-      <div className={`mx-auto flex w-full max-w-[1680px] justify-center ${row}`}>
-        <div className={`w-full max-w-[660px] pb-[4vh] pt-[20vh] ${col}`}>
+      <div
+        className={`mx-auto flex w-full max-w-[1680px] flex-col items-center md:flex-row md:items-stretch ${row}`}
+      >
+        <div className="mb-8 w-full md:hidden">
+          <UnitChassis screen={proof.screen} />
+        </div>
+        <div className={`w-full max-w-[660px] pb-[4vh] pt-0 md:pt-[20vh] ${col}`}>
           <RevealText
             as="h2"
             runs={proof.statement}
